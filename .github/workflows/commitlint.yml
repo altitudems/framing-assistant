@@ -2,7 +2,11 @@ name: Commitlint
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, edited]
+
+permissions:
+  contents: read
+  pull-requests: read
 
 jobs:
   commitlint:
@@ -17,3 +21,4 @@ jobs:
         uses: wagoid/commitlint-github-action@v6
         with:
           configFile: commitlint.config.cjs
+          token: ${{ secrets.GITHUB_TOKEN }}
