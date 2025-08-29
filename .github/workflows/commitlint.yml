@@ -1,7 +1,7 @@
 name: Commitlint
 
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, synchronize, reopened, edited]
 
 permissions:
@@ -12,11 +12,6 @@ jobs:
   commitlint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
       - name: Commitlint
         uses: wagoid/commitlint-github-action@v6
         with:
