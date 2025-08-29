@@ -15,7 +15,7 @@
     "test": "vitest --run",
     "release": "semantic-release",
     "commitlint": "commitlint --from origin/main --to HEAD || true",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.131.27",
