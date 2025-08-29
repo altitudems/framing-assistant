@@ -1,0 +1,109 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  position: relative;
+}
+
+.label {
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-xs);
+}
+
+.inputContainer {
+  display: flex;
+  align-items: center;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background);
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.input {
+  flex-grow: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-base);
+  border: none;
+  background: transparent;
+  color: var(--color-text);
+  width: 100%; /* Ensures input takes full width within its container */
+}
+
+.input:focus {
+  outline: none;
+}
+
+.input:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Focus state for the input container */
+.input:focus-within {
+  border-color: oklch(var(--lightness-primary) var(--chroma-brand) var(--hue-brand));
+}
+
+.leadingIcon,
+.trailingIcon {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-sm);
+  color: var(--color-text-muted);
+}
+
+/* Full Width */
+.fullWidth {
+  width: 100%;
+}
+
+/* Size Variants */
+.small .input {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 0.875rem;
+}
+
+.medium .input {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-base);
+}
+
+.large .input {
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: 1.125rem;
+}
+
+/* Color & Style Variants */
+
+/* Outline (Default) */
+.outline .inputContainer {
+  border-color: var(--interactive-neutral-outline-border);
+}
+.outline .input {
+  color: var(--interactive-neutral-outline-text);
+}
+.outline .inputContainer:has(.input:focus) {
+  border-color: var(--interactive-neutral-outline-hover-border);
+  box-shadow: var(--interactive-neutral-outline-focus-ring-color);
+}
+.outline .inputContainer:has(.input:disabled) {
+  border-color: var(--interactive-neutral-outline-disabled-border);
+  background-color: oklch(var(--lightness-background) var(--chroma-neutral) var(--hue-neutral));
+}
+
+/* Filled */
+.filled .inputContainer {
+  background-color: oklch(var(--lightness-neutral) var(--chroma-neutral) var(--hue-neutral) / 0.1);
+  border-color: oklch(var(--lightness-neutral) var(--chroma-neutral) var(--hue-neutral) / 0.3);
+}
+.filled .input {
+  color: var(--interactive-neutral-filled-text);
+}
+.filled .inputContainer:has(.input:focus) {
+  border-color: var(--interactive-neutral-filled-hover-bg);
+  box-shadow: var(--interactive-neutral-filled-focus-ring-color);
+}
+.filled .inputContainer:has(.input:disabled) {
+  background-color: oklch(var(--lightness-neutral-active) var(--chroma-neutral) var(--hue-neutral) / 0.1);
+  border-color: var(--interactive-neutral-outline-disabled-border);
+}

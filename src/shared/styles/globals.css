@@ -1,0 +1,37 @@
+/* Global Styles */
+html, body {
+  height: 100%;
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Other global styles */
+a {
+  color: var(--color-brand-500); /* Use primary brand color for links */
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-brand-600);
+  text-decoration: none;
+}
+
+/* Basic Button Reset */
+button {
+  background: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit; /* Inherit outline for focus ring */
+}
+
+button:focus-visible {
+  outline: var(--focus-ring);
+  border-radius: var(--border-radius-sm); /* Apply border-radius from variables */
+}
