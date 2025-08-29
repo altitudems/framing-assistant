@@ -45,6 +45,9 @@ importers:
       '@eslint/js':
         specifier: ^9.33.0
         version: 9.34.0
+      '@mdx-js/react':
+        specifier: ^3.1.0
+        version: 3.1.0(@types/react@19.1.12)(react@19.1.1)
       '@semantic-release/changelog':
         specifier: ^6.0.3
         version: 6.0.3(semantic-release@24.2.7(typescript@5.9.2))
@@ -129,6 +132,9 @@ importers:
       lint-staged:
         specifier: ^16.1.5
         version: 16.1.5
+      markdown-to-jsx:
+        specifier: ^7.7.13
+        version: 7.7.13(react@19.1.1)
       playwright:
         specifier: ^1.55.0
         version: 1.55.0
@@ -2655,6 +2661,12 @@ packages:
 
   map-or-similar@1.5.0:
     resolution: {integrity: sha512-0aF7ZmVon1igznGI4VS30yugpduQW3y3GkcgGJOp7d8x8QrizhigUxjI/m2UojsXXto+jLAH3KSz+xOJTiORjg==}
+
+  markdown-to-jsx@7.7.13:
+    resolution: {integrity: sha512-DiueEq2bttFcSxUs85GJcQVrOr0+VVsPfj9AEUPqmExJ3f8P/iQNvZHltV4tm1XVhu1kl0vWBZWT3l99izRMaA==}
+    engines: {node: '>= 10'}
+    peerDependencies:
+      react: '>= 0.14.0'
 
   marked-terminal@7.3.0:
     resolution: {integrity: sha512-t4rBvPsHc57uE/2nJOLmMbZCQ4tgAccAED3ngXQqW6g+TxA488JzJ+FK3lQkzBQOI1mRV/r/Kq+1ZlJ4D0owQw==}
@@ -6602,6 +6614,10 @@ snapshots:
       semver: 7.7.2
 
   map-or-similar@1.5.0: {}
+
+  markdown-to-jsx@7.7.13(react@19.1.1):
+    dependencies:
+      react: 19.1.1
 
   marked-terminal@7.3.0(marked@15.0.12):
     dependencies:
