@@ -15,6 +15,7 @@ permissions:
 
 jobs:
   commitlint:
+    if: github.actor != 'dependabot[bot]' && github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Commitlint
