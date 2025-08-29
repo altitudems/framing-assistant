@@ -83,6 +83,7 @@ const WallForm: React.FC<WallFormProps> = ({ initialValues, onSubmit }) => {
           label="Floor Gap (in)"
           name="floorGap"
           type="number"
+          step={0.1}
           defaultValue={initialValues?.floorGap}
           required
         />
