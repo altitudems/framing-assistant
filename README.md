@@ -17,6 +17,10 @@ This tool is designed by framers, for framers. We welcome feedback and suggestio
 
 **Disclaimer**: This tool provides estimates for planning purposes. Always verify calculations against local building codes and consult with qualified professionals for structural requirements. Results should be reviewed by a licensed contractor or engineer before construction.
 
+## Deployment
+
+The project includes a GitHub Actions workflow that builds the app and publishes it to GitHub Pages whenever changes land on `main`. After enabling Pages in the repository settings, the site will be available at `https://<username>.github.io/framing-assistant/`.
+
 ## Releasing
 
 - Use Conventional Commits for all changes (e.g., `feat: add WallForm validation`, `fix(button): correct disabled state)`. Avoid manual version bumps or tags.
