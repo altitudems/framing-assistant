@@ -19,22 +19,35 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Check repo auto-merge setting
+        id: automerge_setting
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          ALLOW=$(gh api repos/${GITHUB_REPOSITORY} -q '.allow_auto_merge')
+          echo "allow_auto_merge=$ALLOW" >> "$GITHUB_OUTPUT"
+
+      - name: Exit if auto-merge is disabled
+        if: steps.automerge_setting.outputs.allow_auto_merge != 'true'
+        run: |
+          echo "Auto-merge is disabled for this repository. Skipping approval and auto-merge." 
+          exit 0
+
       - name: Approve PR (patch or dev minor)
         if: |
           steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
           (steps.metadata.outputs.update-type == 'version-update:semver-minor' && steps.metadata.outputs.dependency-type == 'direct:development')
-        uses: peter-evans/approve-pull-request@v5
-        with:
-          pull-request-number: ${{ github.event.pull_request.number }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          approval-message: Auto-approved by workflow for safe dependency updates.
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr review ${{ github.event.pull_request.number }} --approve -b "Auto-approved by workflow for safe dependency updates."
 
       - name: Enable auto-merge
         if: |
           steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
           (steps.metadata.outputs.update-type == 'version-update:semver-minor' && steps.metadata.outputs.dependency-type == 'direct:development')
-        uses: peter-evans/enable-pull-request-automerge@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          pull-request-number: ${{ github.event.pull_request.number }}
-          merge-method: squash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge ${{ github.event.pull_request.number }} --squash --auto
