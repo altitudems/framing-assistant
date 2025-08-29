@@ -9,20 +9,31 @@ interface WallFormProps {
 }
 
 const WallForm: React.FC<WallFormProps> = ({ initialValues, onSubmit }) => {
+  const [bottomPlate, setBottomPlate] = React.useState<WallFormValues['bottomPlate']>(
+    initialValues?.bottomPlate ?? 'standard',
+  );
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
+    const bottomPlateValue =
+      (data.get('bottomPlate') as WallFormValues['bottomPlate']) || 'standard';
     const values: WallFormValues = {
       name: (data.get('name') as string) || '',
       length: Number(data.get('length')),
       height: Number(data.get('height')),
       studSpacing: (data.get('studSpacing') as '16' | '24') || '16',
+      topPlate: (data.get('topPlate') as 'single' | 'double') || 'double',
+      bottomPlate: bottomPlateValue,
     };
+    if (bottomPlateValue === 'floating') {
+      values.floorGap = Number(data.get('floorGap'));
+    }
     onSubmit(values);
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form className={styles.wallForm} onSubmit={handleSubmit}>
       <TextField label="Name" name="name" defaultValue={initialValues?.name} required />
       <TextField
         label="Length (ft)"
@@ -47,6 +58,35 @@ const WallForm: React.FC<WallFormProps> = ({ initialValues, onSubmit }) => {
         ]}
         defaultValue={initialValues?.studSpacing ?? '16'}
       />
+      <Select
+        label="Top Plate"
+        name="topPlate"
+        options={[
+          { value: 'single', label: 'Single' },
+          { value: 'double', label: 'Double' },
+        ]}
+        defaultValue={initialValues?.topPlate ?? 'double'}
+      />
+      <Select
+        label="Bottom Plate Type"
+        name="bottomPlate"
+        options={[
+          { value: 'standard', label: 'Standard' },
+          { value: 'floating', label: 'Floating' },
+          { value: 'pressure-treated', label: 'Pressure-Treated' },
+        ]}
+        value={bottomPlate}
+        onChange={(e) => setBottomPlate(e.target.value as WallFormValues['bottomPlate'])}
+      />
+      {bottomPlate === 'floating' && (
+        <TextField
+          label="Floor Gap (in)"
+          name="floorGap"
+          type="number"
+          defaultValue={initialValues?.floorGap}
+          required
+        />
+      )}
       <Button type="submit" colorVariant="primary">
         Save Wall
       </Button>

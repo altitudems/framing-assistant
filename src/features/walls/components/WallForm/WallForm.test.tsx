@@ -19,6 +19,15 @@ describe('WallForm', () => {
     fireEvent.change(screen.getByLabelText(/stud spacing/i), {
       target: { value: '24' },
     });
+    fireEvent.change(screen.getByLabelText(/top plate/i), {
+      target: { value: 'single' },
+    });
+    fireEvent.change(screen.getByLabelText(/bottom plate type/i), {
+      target: { value: 'floating' },
+    });
+    fireEvent.change(screen.getByLabelText(/floor gap/i), {
+      target: { value: '1.5' },
+    });
 
     fireEvent.click(screen.getByRole('button', { name: /save wall/i }));
 
@@ -27,6 +36,9 @@ describe('WallForm', () => {
       length: 10,
       height: 8,
       studSpacing: '24',
+      topPlate: 'single',
+      bottomPlate: 'floating',
+      floorGap: 1.5,
     });
   });
 });

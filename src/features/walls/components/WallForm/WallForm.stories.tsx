@@ -13,5 +13,13 @@ type Story = StoryObj<typeof WallForm>;
 export const Default: Story = {
   args: {
     onSubmit: (values) => console.log(values),
+    initialValues: {
+      name: 'Wall A',
+      length: 10,
+      height: 8,
+      studSpacing: '16',
+      topPlate: 'double',
+      bottomPlate: 'standard',
+    },
   },
 };
