@@ -5,23 +5,23 @@
   --line-height-base: 1.5;
 
   /* OKLCH Base Hues/Chroma */
-  
+
   --hue-brand: 290;
   --chroma-brand: 0.16; /* Default chroma for brand colors (equivalent to old c-brand-300) */
   --lightness-primary: 40%;
   --lightness-primary-hover: 55%;
   --lightness-primary-active: 45%;
-  
+
   --hue-neutral: 310;
   --chroma-neutral: 0.02; /* Default chroma for neutrals */
   --lightness-neutral: 45%;
   --lightness-neutral-hover: 50%;
   --lightness-neutral-active: 40%;
-  
+
   --lightness-accent: 50%;
   --lightness-accent-hover: 45%;
   --lightness-accent-active: 40%;
-  
+
   --hue-destructive: 40;
   --chroma-destructive: 0.3;
   --lightness-destructive: 50%;
@@ -37,79 +37,127 @@
   --lightness-border: 80%;
 
   --color-text: oklch(var(--lightness-text) 0 0); /* Main text color */
-  --color-text-muted: oklch(var(--lightness-text-muted) var(--chroma-neutral) var(--hue-neutral)); /* Muted text color */
-  --color-background: oklch(var(--lightness-background) var(--chroma-neutral) var(--hue-neutral)); /* Specific lightness for background */
+  --color-text-muted: oklch(
+    var(--lightness-text-muted) var(--chroma-neutral) var(--hue-neutral)
+  ); /* Muted text color */
+  --color-background: oklch(
+    var(--lightness-background) var(--chroma-neutral) var(--hue-neutral)
+  ); /* Specific lightness for background */
 
   /* Surface Levels derived from background with transparent overlays */
   --surface-opacity-1: 0.08;
   --surface-opacity-2: 0.12;
   --surface-opacity-3: 0.16;
-  --surface-opacity-4: 0.20;
+  --surface-opacity-4: 0.2;
 
   --color-surface-1: oklch(var(--lightness-text) 0 0 / var(--surface-opacity-1));
   --color-surface-2: oklch(var(--lightness-text) 0 0 / var(--surface-opacity-2));
   --color-surface-3: oklch(var(--lightness-text) 0 0 / var(--surface-opacity-3));
   --color-surface-4: oklch(var(--lightness-text) 0 0 / var(--surface-opacity-4));
 
-  --color-border: oklch(var(--lightness-border) var(--chroma-neutral) var(--hue-neutral) / 0.7); /* Specific lightness for border */
+  --color-border: oklch(
+    var(--lightness-border) var(--chroma-neutral) var(--hue-neutral) / 0.7
+  ); /* Specific lightness for border */
 
   /* Generic Interactive Overlays (used for Ghost and Outline buttons) */
   --interactive-hover-overlay-bg: var(--color-surface-1);
   --interactive-active-overlay-bg: var(--color-surface-2);
 
   /* Interactive Controls - Primary Filled Variant */
-  --interactive-primary-filled-bg: oklch(var(--lightness-primary) var(--chroma-brand) var(--hue-brand));
+  --interactive-primary-filled-bg: oklch(
+    var(--lightness-primary) var(--chroma-brand) var(--hue-brand)
+  );
   --interactive-primary-filled-text: oklch(var(--lightness-background) 0 0);
-  --interactive-primary-filled-hover-bg: oklch(var(--lightness-primary-hover) var(--chroma-brand) var(--hue-brand));
-  --interactive-primary-filled-active-bg: oklch(var(--lightness-primary-active) var(--chroma-brand) var(--hue-brand));
+  --interactive-primary-filled-hover-bg: oklch(
+    var(--lightness-primary-hover) var(--chroma-brand) var(--hue-brand)
+  );
+  --interactive-primary-filled-active-bg: oklch(
+    var(--lightness-primary-active) var(--chroma-brand) var(--hue-brand)
+  );
   --interactive-primary-filled-active-text: oklch(var(--lightness-background) 0 0);
   --interactive-primary-filled-focus-ring-color: var(--focus-ring);
-  --interactive-primary-filled-disabled-bg: oklch(var(--lightness-neutral-active) var(--chroma-neutral) var(--hue-neutral));
+  --interactive-primary-filled-disabled-bg: oklch(
+    var(--lightness-neutral-active) var(--chroma-neutral) var(--hue-neutral)
+  );
   --interactive-primary-filled-disabled-text: oklch(var(--lightness-background) 0 0);
 
   /* Interactive Controls - Primary Outline Variant */
   --interactive-primary-outline-bg: transparent;
-  --interactive-primary-outline-border: oklch(var(--lightness-primary) var(--chroma-brand) var(--hue-brand));
-  --interactive-primary-outline-text: oklch(var(--lightness-primary) var(--chroma-brand) var(--hue-brand));
+  --interactive-primary-outline-border: oklch(
+    var(--lightness-primary) var(--chroma-brand) var(--hue-brand)
+  );
+  --interactive-primary-outline-text: oklch(
+    var(--lightness-primary) var(--chroma-brand) var(--hue-brand)
+  );
   --interactive-primary-outline-hover-bg: var(--interactive-hover-overlay-bg);
-  --interactive-primary-outline-hover-border: oklch(var(--lightness-primary-hover) var(--chroma-brand) var(--hue-brand));
+  --interactive-primary-outline-hover-border: oklch(
+    var(--lightness-primary-hover) var(--chroma-brand) var(--hue-brand)
+  );
   --interactive-primary-outline-active-bg: var(--interactive-active-overlay-bg);
-  --interactive-primary-outline-active-border: oklch(var(--lightness-primary-active) var(--chroma-brand) var(--hue-brand));
-  --interactive-primary-outline-active-text: oklch(var(--lightness-primary-active) var(--chroma-brand) var(--hue-brand));
+  --interactive-primary-outline-active-border: oklch(
+    var(--lightness-primary-active) var(--chroma-brand) var(--hue-brand)
+  );
+  --interactive-primary-outline-active-text: oklch(
+    var(--lightness-primary-active) var(--chroma-brand) var(--hue-brand)
+  );
   --interactive-primary-outline-focus-ring-color: var(--focus-ring);
   --interactive-primary-outline-disabled-bg: transparent;
-  --interactive-primary-outline-disabled-border: oklch(var(--lightness-neutral-active) var(--chroma-neutral) var(--hue-neutral));
-  --interactive-primary-outline-disabled-text: oklch(var(--lightness-text-muted) var(--chroma-neutral) var(--hue-neutral));
+  --interactive-primary-outline-disabled-border: oklch(
+    var(--lightness-neutral-active) var(--chroma-neutral) var(--hue-neutral)
+  );
+  --interactive-primary-outline-disabled-text: oklch(
+    var(--lightness-text-muted) var(--chroma-neutral) var(--hue-neutral)
+  );
 
   /* Interactive Controls - Primary Ghost Variant */
   --interactive-primary-ghost-bg: transparent;
-  --interactive-primary-ghost-text: oklch(var(--lightness-primary) var(--chroma-brand) var(--hue-brand));
+  --interactive-primary-ghost-text: oklch(
+    var(--lightness-primary) var(--chroma-brand) var(--hue-brand)
+  );
   --interactive-primary-ghost-hover-bg: var(--interactive-hover-overlay-bg);
   --interactive-primary-ghost-active-bg: var(--interactive-active-overlay-bg);
-  --interactive-primary-ghost-active-text: oklch(var(--lightness-primary-active) var(--chroma-brand) var(--hue-brand));
+  --interactive-primary-ghost-active-text: oklch(
+    var(--lightness-primary-active) var(--chroma-brand) var(--hue-brand)
+  );
   --interactive-primary-ghost-focus-ring-color: var(--focus-ring);
   --interactive-primary-ghost-disabled-bg: transparent;
-  --interactive-primary-ghost-disabled-text: oklch(var(--lightness-text-muted) var(--chroma-neutral) var(--hue-neutral));
+  --interactive-primary-ghost-disabled-text: oklch(
+    var(--lightness-text-muted) var(--chroma-neutral) var(--hue-neutral)
+  );
 
   /* Interactive Controls - Neutral Filled Variant */
-  --interactive-neutral-filled-bg: oklch(var(--lightness-neutral) var(--chroma-neutral) var(--hue-neutral));
+  --interactive-neutral-filled-bg: oklch(
+    var(--lightness-neutral) var(--chroma-neutral) var(--hue-neutral)
+  );
   --interactive-neutral-filled-text: oklch(var(--lightness-background) 0 0);
-  --interactive-neutral-filled-hover-bg: oklch(var(--lightness-neutral-hover) var(--chroma-neutral) var(--hue-neutral)); 
-  --interactive-neutral-filled-active-bg: oklch(var(--lightness-neutral-active) var(--chroma-neutral) var(--hue-neutral));
+  --interactive-neutral-filled-hover-bg: oklch(
+    var(--lightness-neutral-hover) var(--chroma-neutral) var(--hue-neutral)
+  );
+  --interactive-neutral-filled-active-bg: oklch(
+    var(--lightness-neutral-active) var(--chroma-neutral) var(--hue-neutral)
+  );
   --interactive-neutral-filled-active-text: oklch(var(--lightness-background) 0 0);
   --interactive-neutral-filled-focus-ring-color: var(--focus-ring);
-  --interactive-neutral-filled-disabled-bg: oklch(var(--lightness-neutral-active) var(--chroma-neutral) var(--hue-neutral));
+  --interactive-neutral-filled-disabled-bg: oklch(
+    var(--lightness-neutral-active) var(--chroma-neutral) var(--hue-neutral)
+  );
   --interactive-neutral-filled-disabled-text: oklch(var(--lightness-background) 0 0);
 
   /* Interactive Controls - Neutral Ghost Variant */
   --interactive-neutral-ghost-bg: transparent;
-  --interactive-neutral-ghost-text: oklch(var(--lightness-neutral) var(--chroma-neutral) var(--hue-neutral));
+  --interactive-neutral-ghost-text: oklch(
+    var(--lightness-neutral) var(--chroma-neutral) var(--hue-neutral)
+  );
   --interactive-neutral-ghost-hover-bg: var(--interactive-hover-overlay-bg);
   --interactive-neutral-ghost-active-bg: var(--interactive-active-overlay-bg);
-  --interactive-neutral-ghost-active-text: oklch(var(--lightness-neutral-active) var(--chroma-neutral) var(--hue-neutral));
+  --interactive-neutral-ghost-active-text: oklch(
+    var(--lightness-neutral-active) var(--chroma-neutral) var(--hue-neutral)
+  );
   --interactive-neutral-ghost-focus-ring-color: var(--focus-ring);
   --interactive-neutral-ghost-disabled-bg: transparent;
-  --interactive-neutral-ghost-disabled-text: oklch(var(--lightness-text-muted) var(--chroma-neutral) var(--hue-neutral));
+  --interactive-neutral-ghost-disabled-text: oklch(
+    var(--lightness-text-muted) var(--chroma-neutral) var(--hue-neutral)
+  );
 
   /* Interactive Controls - Neutral Outline Variant */
   --interactive-neutral-outline-bg: transparent;
@@ -126,34 +174,56 @@
   --interactive-neutral-outline-disabled-text: var(--color-text-muted);
 
   /* Interactive Controls - Destructive Filled Variant */
-  --interactive-destructive-filled-bg: oklch(var(--lightness-destructive) var(--chroma-destructive) var(--hue-destructive));
+  --interactive-destructive-filled-bg: oklch(
+    var(--lightness-destructive) var(--chroma-destructive) var(--hue-destructive)
+  );
   --interactive-destructive-filled-text: oklch(var(--lightness-background) 0 0);
-  --interactive-destructive-filled-hover-bg: oklch(var(--lightness-destructive-hover) var(--chroma-destructive) var(--hue-destructive));
-  --interactive-destructive-filled-active-bg: oklch(var(--lightness-destructive-active) var(--chroma-destructive) var(--hue-destructive));
+  --interactive-destructive-filled-hover-bg: oklch(
+    var(--lightness-destructive-hover) var(--chroma-destructive) var(--hue-destructive)
+  );
+  --interactive-destructive-filled-active-bg: oklch(
+    var(--lightness-destructive-active) var(--chroma-destructive) var(--hue-destructive)
+  );
   --interactive-destructive-filled-active-text: oklch(var(--lightness-background) 0 0);
   --interactive-destructive-filled-focus-ring-color: var(--focus-ring);
-  --interactive-destructive-filled-disabled-bg: oklch(var(--lightness-destructive-active) var(--chroma-destructive) var(--hue-destructive));
+  --interactive-destructive-filled-disabled-bg: oklch(
+    var(--lightness-destructive-active) var(--chroma-destructive) var(--hue-destructive)
+  );
   --interactive-destructive-filled-disabled-text: oklch(var(--lightness-background) 0 0);
 
   /* Interactive Controls - Destructive Ghost Variant */
   --interactive-destructive-ghost-bg: transparent;
-  --interactive-destructive-ghost-text: oklch(var(--lightness-destructive) var(--chroma-destructive) var(--hue-destructive));
+  --interactive-destructive-ghost-text: oklch(
+    var(--lightness-destructive) var(--chroma-destructive) var(--hue-destructive)
+  );
   --interactive-destructive-ghost-hover-bg: var(--interactive-hover-overlay-bg);
   --interactive-destructive-ghost-active-bg: var(--interactive-active-overlay-bg);
-  --interactive-destructive-ghost-active-text: oklch(var(--lightness-destructive-active) var(--chroma-destructive) var(--hue-destructive));
+  --interactive-destructive-ghost-active-text: oklch(
+    var(--lightness-destructive-active) var(--chroma-destructive) var(--hue-destructive)
+  );
   --interactive-destructive-ghost-focus-ring-color: var(--focus-ring);
   --interactive-destructive-ghost-disabled-bg: transparent;
   --interactive-destructive-ghost-disabled-text: var(--color-text-muted);
 
   /* Interactive Controls - Destructive Outline Variant */
   --interactive-destructive-outline-bg: transparent;
-  --interactive-destructive-outline-border: oklch(var(--lightness-destructive) var(--chroma-destructive) var(--hue-destructive));
-  --interactive-destructive-outline-text: oklch(var(--lightness-destructive) var(--chroma-destructive) var(--hue-destructive));
+  --interactive-destructive-outline-border: oklch(
+    var(--lightness-destructive) var(--chroma-destructive) var(--hue-destructive)
+  );
+  --interactive-destructive-outline-text: oklch(
+    var(--lightness-destructive) var(--chroma-destructive) var(--hue-destructive)
+  );
   --interactive-destructive-outline-hover-bg: var(--interactive-hover-overlay-bg);
-  --interactive-destructive-outline-hover-border: oklch(var(--lightness-destructive-hover) var(--chroma-destructive) var(--hue-destructive));
+  --interactive-destructive-outline-hover-border: oklch(
+    var(--lightness-destructive-hover) var(--chroma-destructive) var(--hue-destructive)
+  );
   --interactive-destructive-outline-active-bg: var(--interactive-active-overlay-bg);
-  --interactive-destructive-outline-active-border: oklch(var(--lightness-destructive) var(--chroma-destructive) var(--hue-destructive));
-  --interactive-destructive-outline-active-text: oklch(var(--lightness-destructive-active) var(--chroma-destructive) var(--hue-destructive));
+  --interactive-destructive-outline-active-border: oklch(
+    var(--lightness-destructive) var(--chroma-destructive) var(--hue-destructive)
+  );
+  --interactive-destructive-outline-active-text: oklch(
+    var(--lightness-destructive-active) var(--chroma-destructive) var(--hue-destructive)
+  );
   --interactive-destructive-outline-focus-ring-color: var(--focus-ring);
   --interactive-destructive-outline-disabled-bg: transparent;
   --interactive-destructive-outline-disabled-border: var(--color-border);
@@ -181,7 +251,7 @@
 }
 
 /* Dark Theme Overrides */
-html[data-theme="dark"] {
+html[data-theme='dark'] {
   /* Override base lightness values for dark mode */
   --lightness-primary: 60%;
   --lightness-primary-hover: 65%;
@@ -203,7 +273,7 @@ html[data-theme="dark"] {
   --lightness-text-muted: 70%;
   --lightness-background: 10%;
   --lightness-border: 30%;
-  
+
   --interactive-primary-filled-text: oklch(var(--lightness-text) 0 0);
   --interactive-primary-filled-active-text: oklch(var(--lightness-text) 0 0);
   --interactive-neutral-filled-text: oklch(var(--lightness-text) 0 0);
@@ -211,7 +281,5 @@ html[data-theme="dark"] {
   --interactive-destructive-filled-text: oklch(var(--lightness-text) 0 0);
   --interactive-destructive-filled-active-text: oklch(var(--lightness-text) 0 0);
 
-
   --chroma-destructive: 0.25;
-
 }

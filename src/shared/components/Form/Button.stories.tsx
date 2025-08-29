@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import Button from './Button';
 import HomeIcon from '../../../assets/icons/HomeIcon';
@@ -101,10 +100,18 @@ export const DestructiveButtonStates: Story = {
   render: (args) => (
     <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
       <Button {...args}>Default</Button>
-      <Button {...args} data-hover>Hover (Data)</Button>
-      <Button {...args} active>Active (Prop)</Button>
-      <Button {...args} disabled>Disabled</Button>
-      <Button {...args} data-active>Active (Data)</Button>
+      <Button {...args} data-hover>
+        Hover (Data)
+      </Button>
+      <Button {...args} active>
+        Active (Prop)
+      </Button>
+      <Button {...args} disabled>
+        Disabled
+      </Button>
+      <Button {...args} data-active>
+        Active (Data)
+      </Button>
     </div>
   ),
 };
@@ -118,10 +125,18 @@ export const IconOnlyButtons: Story = {
   render: (args) => (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'flex-start' }}>
       {colorVariants.map((colorVariant) => (
-        <div key={colorVariant} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', minWidth: '80px' }}>
+        <div
+          key={colorVariant}
+          style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', minWidth: '80px' }}
+        >
           <h3>{colorVariant.charAt(0).toUpperCase() + colorVariant.slice(1)}</h3>
           {styleTypes.map((styleType) => (
-            <Button key={`${colorVariant}-${styleType}`} {...args} colorVariant={colorVariant} styleType={styleType}>
+            <Button
+              key={`${colorVariant}-${styleType}`}
+              {...args}
+              colorVariant={colorVariant}
+              styleType={styleType}
+            >
               {args.children}
             </Button>
           ))}
@@ -151,10 +166,18 @@ export const CircularButtons: Story = {
   render: (args) => (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'flex-start' }}>
       {colorVariants.map((colorVariant) => (
-        <div key={colorVariant} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', minWidth: '80px' }}>
+        <div
+          key={colorVariant}
+          style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', minWidth: '80px' }}
+        >
           <h3>{colorVariant.charAt(0).toUpperCase() + colorVariant.slice(1)}</h3>
           {styleTypes.map((styleType) => (
-            <Button key={`${colorVariant}-${styleType}`} {...args} colorVariant={colorVariant} styleType={styleType}>
+            <Button
+              key={`${colorVariant}-${styleType}`}
+              {...args}
+              colorVariant={colorVariant}
+              styleType={styleType}
+            >
               {args.children}
             </Button>
           ))}
@@ -186,10 +209,18 @@ export const IconWithLabelButtons: Story = {
   render: (args) => (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'flex-start' }}>
       {colorVariants.map((colorVariant) => (
-        <div key={colorVariant} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', minWidth: '120px' }}>
+        <div
+          key={colorVariant}
+          style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', minWidth: '120px' }}
+        >
           <h3>{colorVariant.charAt(0).toUpperCase() + colorVariant.slice(1)}</h3>
           {styleTypes.map((styleType) => (
-            <Button key={`${colorVariant}-${styleType}`} {...args} colorVariant={colorVariant} styleType={styleType}>
+            <Button
+              key={`${colorVariant}-${styleType}`}
+              {...args}
+              colorVariant={colorVariant}
+              styleType={styleType}
+            >
               {args.children}
             </Button>
           ))}

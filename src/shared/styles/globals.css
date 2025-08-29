@@ -1,12 +1,15 @@
 /* Global Styles */
-html, body {
+html,
+body {
   height: 100%;
   font-family: var(--font-family-primary);
   font-size: var(--font-size-base);
   line-height: var(--line-height-base);
   background-color: var(--color-background);
   color: var(--color-text);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 /* Other global styles */

@@ -17,7 +17,9 @@
   border-radius: var(--border-radius-sm);
   border: 1px solid var(--color-border);
   background-color: var(--color-background);
-  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition:
+    border-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
 }
 
 .input {
@@ -104,6 +106,8 @@
   box-shadow: var(--interactive-neutral-filled-focus-ring-color);
 }
 .filled .inputContainer:has(.input:disabled) {
-  background-color: oklch(var(--lightness-neutral-active) var(--chroma-neutral) var(--hue-neutral) / 0.1);
+  background-color: oklch(
+    var(--lightness-neutral-active) var(--chroma-neutral) var(--hue-neutral) / 0.1
+  );
   border-color: var(--interactive-neutral-outline-disabled-border);
 }

@@ -1,5 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, test, expect } from 'vitest';
 import TextField from './TextField';
+import styles from './TextField.module.css';
 
 describe('TextField', () => {
   test('renders with label and placeholder', () => {
@@ -16,15 +18,13 @@ describe('TextField', () => {
   });
 
   test('applies styleType class', () => {
-    const { container } = render(
-      <TextField label="Search" styleType="filled" />
-    );
-    expect(container.firstChild).toHaveClass('filled');
+    const { container } = render(<TextField label="Search" styleType="filled" />);
+    expect(container.firstChild).toHaveClass(styles.filled);
   });
 
   test('applies size class', () => {
     const { container } = render(<TextField label="Name" size="large" />);
-    expect(container.firstChild).toHaveClass('large');
+    expect(container.firstChild).toHaveClass(styles.large);
   });
 
   test('renders with leading and trailing icons', () => {
@@ -32,11 +32,7 @@ describe('TextField', () => {
     const TrailingIcon = () => <span data-testid="trailing-icon">T</span>;
 
     render(
-      <TextField
-        label="Amount"
-        leadingIcon={<LeadingIcon />}
-        trailingIcon={<TrailingIcon />}
-      />
+      <TextField label="Amount" leadingIcon={<LeadingIcon />} trailingIcon={<TrailingIcon />} />,
     );
     expect(screen.getByTestId('leading-icon')).toBeInTheDocument();
     expect(screen.getByTestId('trailing-icon')).toBeInTheDocument();
@@ -49,6 +45,6 @@ describe('TextField', () => {
 
   test('applies fullWidth class when fullWidth prop is true', () => {
     const { container } = render(<TextField label="Full Width" fullWidth />);
-    expect(container.firstChild).toHaveClass('fullWidth');
+    expect(container.firstChild).toHaveClass(styles.fullWidth);
   });
 });

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ThemeProvider } from './ThemeProvider';
 
 const meta = {
@@ -18,7 +18,13 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     children: (
-      <div style={{ padding: '20px', color: 'var(--color-text)', backgroundColor: 'var(--color-background)' }}>
+      <div
+        style={{
+          padding: '20px',
+          color: 'var(--color-text)',
+          backgroundColor: 'var(--color-background)',
+        }}
+      >
         <h1>Themed Content</h1>
         <p>This content will adapt to the current theme.</p>
       </div>

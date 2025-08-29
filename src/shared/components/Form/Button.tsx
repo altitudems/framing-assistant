@@ -9,7 +9,7 @@ type ButtonSize = 'xs' | 'small' | 'medium' | 'large';
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;
   colorVariant?: ButtonColorVariant; // New: determines the color palette
-  styleType?: ButtonStyleType;       // New: determines the visual style
+  styleType?: ButtonStyleType; // New: determines the visual style
   size?: ButtonSize;
   iconOnly?: boolean;
   circular?: boolean;
@@ -34,7 +34,7 @@ const Button: React.FC<ButtonProps> = ({
     { [styles.iconOnly]: iconOnly },
     { [styles.circular]: circular },
     { [styles.active]: active }, // Apply active class if prop is true
-    className
+    className,
   );
 
   return (
