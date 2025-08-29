@@ -1,0 +1,45 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.switch {
+  position: relative;
+  width: 2rem;
+  height: 1rem;
+  appearance: none;
+  background-color: var(--color-border);
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.switch::before {
+  content: '';
+  position: absolute;
+  top: 0.125rem;
+  left: 0.125rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  background: var(--color-background);
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.switch:checked {
+  background-color: var(--color-primary);
+}
+
+.switch:checked::before {
+  transform: translateX(1rem);
+}
+
+.switch:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.label {
+  cursor: pointer;
+}
