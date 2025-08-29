@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './AppHeader.module.css';
-import { useTheme } from '../../../app/providers/ThemeProvider';
-import Button from '../Base/Button'; // Import the new Button component
+import { useTheme } from '../../../app/providers/themeContext';
+import Button from '../Form/Button';
 
 const AppHeader: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
@@ -13,8 +13,8 @@ const AppHeader: React.FC = () => {
         <Button
           onClick={toggleTheme}
           colorVariant="neutral" // Use neutral color palette
-          styleType="ghost"    // Use ghost style
-          size="small"   // Choose an appropriate size
+          styleType="ghost" // Use ghost style
+          size="small" // Choose an appropriate size
           aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
           className={styles.themeToggle}
         >

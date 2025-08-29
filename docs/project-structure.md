@@ -1,4 +1,5 @@
 ### Project Structure
+
 ```
 src/
 ├── features/           # Feature-based modules

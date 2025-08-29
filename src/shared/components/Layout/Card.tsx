@@ -6,11 +6,7 @@ interface CardProps {
 }
 
 const Card = ({ children, className }: CardProps) => {
-  return (
-    <div className={`${styles.card} ${className || ''}`}>
-      {children}
-    </div>
-  );
+  return <div className={`${styles.card} ${className || ''}`}>{children}</div>;
 };
 
 export default Card;

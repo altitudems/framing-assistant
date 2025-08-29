@@ -21,7 +21,11 @@ describe('Button', () => {
   });
 
   it('renders with a custom colorVariant and styleType', () => {
-    render(<Button colorVariant="neutral" styleType="outline" size="small">Click Me</Button>);
+    render(
+      <Button colorVariant="neutral" styleType="outline" size="small">
+        Click Me
+      </Button>,
+    );
     const button = screen.getByRole('button', { name: /click me/i });
     expect(button).toHaveClass(styles['neutral-outline']); // Use styles
     expect(button).toHaveClass(styles.small);
@@ -35,7 +39,11 @@ describe('Button', () => {
   });
 
   it('renders as icon-only', () => {
-    render(<Button iconOnly aria-label="Home"><HomeIcon /></Button>);
+    render(
+      <Button iconOnly aria-label="Home">
+        <HomeIcon />
+      </Button>,
+    );
     const button = screen.getByRole('button', { name: /home/i });
     expect(button).toBeInTheDocument();
     expect(button).toHaveClass(styles.iconOnly);
@@ -43,7 +51,11 @@ describe('Button', () => {
   });
 
   it('renders as circular', () => {
-    render(<Button circular iconOnly aria-label="Settings"><HomeIcon /></Button>);
+    render(
+      <Button circular iconOnly aria-label="Settings">
+        <HomeIcon />
+      </Button>,
+    );
     const button = screen.getByRole('button', { name: /settings/i });
     expect(button).toBeInTheDocument();
     expect(button).toHaveClass(styles.circular);
@@ -52,7 +64,11 @@ describe('Button', () => {
 
   it('renders a disabled button', () => {
     const handleClick = vi.fn();
-    render(<Button disabled onClick={handleClick}>Disabled Button</Button>);
+    render(
+      <Button disabled onClick={handleClick}>
+        Disabled Button
+      </Button>,
+    );
     const button = screen.getByRole('button', { name: /disabled button/i });
     expect(button).toBeDisabled();
     fireEvent.click(button);
@@ -60,7 +76,11 @@ describe('Button', () => {
   });
 
   it('renders an active button', () => {
-    render(<Button colorVariant="primary" styleType="filled" size="medium" active>Active Button</Button>);
+    render(
+      <Button colorVariant="primary" styleType="filled" size="medium" active>
+        Active Button
+      </Button>,
+    );
     const button = screen.getByRole('button', { name: /active button/i });
     expect(button).toHaveClass(styles.active); // Use styles.active
   });

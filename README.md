@@ -17,4 +17,21 @@ This tool is designed by framers, for framers. We welcome feedback and suggestio
 
 **Disclaimer**: This tool provides estimates for planning purposes. Always verify calculations against local building codes and consult with qualified professionals for structural requirements. Results should be reviewed by a licensed contractor or engineer before construction.
 
+## Releasing
 
+- Use Conventional Commits for all changes (e.g., `feat: add WallForm validation`, `fix(button): correct disabled state)`. Avoid manual version bumps or tags.
+- Merges to `main` trigger semantic-release to compute the next version, update `CHANGELOG.md`, create a GitHub release, and tag it.
+- Versioning rules: `feat` → minor, `fix`/`perf` → patch, `feat!` or `BREAKING CHANGE:` in body → major.
+- PR titles should follow Conventional Commits when using squash merges; CI enforces both PR title and commit style.
+
+## Local Git Hooks
+
+- After installing dependencies (`pnpm install`), Husky sets up Git hooks via the `prepare` script.
+- Commit messages are validated locally with commitlint (`.husky/commit-msg`).
+- Pre-commit runs lint-staged to format with Prettier and lint/fix staged files only (`.husky/pre-commit`).
+- If hooks do not run, ensure hooks are installed: `pnpm run prepare` and that Git is not skipping hooks (`git config --get core.hooksPath` should point to `.husky`).
+
+## Formatting
+
+- Run `pnpm format` to format the repository.
+- Run `pnpm format:check` to verify formatting without writing changes.

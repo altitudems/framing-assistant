@@ -1,15 +1,22 @@
 import { render, screen, act, cleanup } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
-import { ThemeProvider, useTheme } from './ThemeProvider';
+import { ThemeProvider } from './ThemeProvider';
+import { useTheme } from './themeContext';
 
 // Mock localStorage
 const localStorageMock = (() => {
   let store: Record<string, string> = {};
   return {
     getItem: (key: string) => store[key] || null,
-    setItem: (key: string, value: string) => { store[key] = value; },
-    removeItem: (key: string) => { delete store[key]; },
-    clear: () => { store = {}; }
+    setItem: (key: string, value: string) => {
+      store[key] = value;
+    },
+    removeItem: (key: string) => {
+      delete store[key];
+    },
+    clear: () => {
+      store = {};
+    },
   };
 })();
 
@@ -38,7 +45,7 @@ describe('ThemeProvider', () => {
     render(
       <ThemeProvider>
         <TestComponent />
-      </ThemeProvider>
+      </ThemeProvider>,
     );
     expect(screen.getByTestId('theme-display')).toHaveTextContent('dark');
     expect(document.documentElement).toHaveAttribute('data-theme', 'dark');
@@ -49,7 +56,7 @@ describe('ThemeProvider', () => {
     render(
       <ThemeProvider>
         <TestComponent />
-      </ThemeProvider>
+      </ThemeProvider>,
     );
     expect(screen.getByTestId('theme-display')).toHaveTextContent('light');
     expect(document.documentElement).toHaveAttribute('data-theme', 'light');
@@ -59,7 +66,7 @@ describe('ThemeProvider', () => {
     render(
       <ThemeProvider>
         <TestComponent />
-      </ThemeProvider>
+      </ThemeProvider>,
     );
     const toggleButton = screen.getByRole('button', { name: /Toggle Theme/i });
 
