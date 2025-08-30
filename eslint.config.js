@@ -10,7 +10,7 @@ import { globalIgnores } from 'eslint/config';
 
 export default tseslint.config(
   [
-    globalIgnores(['dist']),
+    globalIgnores(['dist', 'src/routeTree.gen.ts']),
     {
       files: ['**/*.{ts,tsx}'],
       extends: [
