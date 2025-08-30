@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate, Outlet } from '@tanstack/react-router';
 import { Box, Heading } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useProjectStore } from '../app/store/projectStore';
@@ -38,6 +38,7 @@ function ProjectsPage() {
           onDelete={(id) => void deleteProject(id)}
         />
       )}
+      <Outlet />
     </Box>
   );
 }
