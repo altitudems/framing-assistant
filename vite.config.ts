@@ -19,7 +19,16 @@ export default defineConfig({
     react(),
   ],
   optimizeDeps: {
-    include: ['react', 'react-dom', '@mdx-js/react', 'markdown-to-jsx'],
+    include: [
+      'react',
+      'react-dom',
+      '@mdx-js/react',
+      'markdown-to-jsx',
+      '@chakra-ui/react',
+      '@emotion/react',
+      '@emotion/styled',
+      'framer-motion',
+    ],
   },
   test: {
     // Common settings for all projects

@@ -1,16 +1,20 @@
 import { createFileRoute } from '@tanstack/react-router';
-import Section from '../shared/components/Layout/Section';
-import Card from '../shared/components/Layout/Card';
+import { Box, Heading, Text } from '@chakra-ui/react';
 
 export const Route = createFileRoute('/projects')({
   // For this specific route, bundle the component together.
   codeSplitGroupings: [['component']],
   component: () => (
-    <Section title="Projects">
-      <Card>
-        <h2>Manage Your Projects</h2>
-        <p>Here you can create new projects or select existing ones.</p>
-      </Card>
-    </Section>
+    <Box p={4}>
+      <Heading as="h1" mb={4}>
+        Projects
+      </Heading>
+      <Box borderWidth="1px" borderRadius="md" p={4}>
+        <Heading as="h2" size="md" mb={2}>
+          Manage Your Projects
+        </Heading>
+        <Text>Here you can create new projects or select existing ones.</Text>
+      </Box>
+    </Box>
   ),
 });

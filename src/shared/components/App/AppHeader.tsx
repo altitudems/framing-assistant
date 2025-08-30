@@ -1,24 +1,22 @@
 import React from 'react';
 import styles from './AppHeader.module.css';
-import { useTheme } from '../../../app/providers/themeContext';
-import Button from '../Form/Button';
+import { Button, useColorMode } from '@chakra-ui/react';
 
 const AppHeader: React.FC = () => {
-  const { theme, toggleTheme } = useTheme();
+  const { colorMode, toggleColorMode } = useColorMode();
 
   return (
     <header className={styles.header}>
       <div className={styles.leftContent}></div>
       <div className={styles.rightContent}>
         <Button
-          onClick={toggleTheme}
-          colorVariant="neutral" // Use neutral color palette
-          styleType="ghost" // Use ghost style
-          size="small" // Choose an appropriate size
-          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
+          onClick={toggleColorMode}
+          variant="ghost"
+          size="sm"
+          aria-label={`Switch to ${colorMode === 'light' ? 'dark' : 'light'} mode`}
           className={styles.themeToggle}
         >
-          {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+          {colorMode === 'light' ? 'Dark Mode' : 'Light Mode'}
         </Button>
       </div>
     </header>

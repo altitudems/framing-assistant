@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from '@tanstack/react-router';
+import { Button } from '@chakra-ui/react';
 import HomeIcon from '../../../assets/icons/HomeIcon';
 import ProjectsIcon from '../../../assets/icons/ProjectsIcon';
 import SettingsIcon from '../../../assets/icons/SettingsIcon';
-import Button from '../Form/Button';
 
 interface AppSidebarProps {
   children?: React.ReactNode;
@@ -21,27 +21,42 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ children }) => {
           to="/"
           activeOptions={{ exact: true }}
           children={({ isActive }) => (
-            <Button colorVariant="neutral" styleType="ghost" size="large" active={isActive}>
-              <HomeIcon />
-              <span>Home</span>
+            <Button
+              variant={isActive ? 'solid' : 'ghost'}
+              colorScheme="gray"
+              size="lg"
+              justifyContent="flex-start"
+              leftIcon={<HomeIcon />}
+            >
+              Home
             </Button>
           )}
         />
         <Link
           to="/projects"
           children={({ isActive }) => (
-            <Button colorVariant="neutral" styleType="ghost" size="large" active={isActive}>
-              <ProjectsIcon />
-              <span>Projects</span>
+            <Button
+              variant={isActive ? 'solid' : 'ghost'}
+              colorScheme="gray"
+              size="lg"
+              justifyContent="flex-start"
+              leftIcon={<ProjectsIcon />}
+            >
+              Projects
             </Button>
           )}
         />
         <Link
           to="/settings"
           children={({ isActive }) => (
-            <Button colorVariant="neutral" styleType="ghost" size="large" active={isActive}>
-              <SettingsIcon />
-              <span>Settings</span>
+            <Button
+              variant={isActive ? 'solid' : 'ghost'}
+              colorScheme="gray"
+              size="lg"
+              justifyContent="flex-start"
+              leftIcon={<SettingsIcon />}
+            >
+              Settings
             </Button>
           )}
         />

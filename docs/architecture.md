@@ -5,7 +5,7 @@
 - **Package Manager**: pnpm for fast, efficient dependency management
 - **Build Tool**: Vite for lightning-fast development and optimized builds
 - **Framework**: React 18+ with TypeScript for type-safe, maintainable code
-- **Styling**: Modern CSS Modules with BEM methodology for scalable, maintainable styles
+- **Styling**: [Chakra UI](https://chakra-ui.com) with theme-based style props; CSS Modules for custom cases
 - **Visualizations**: Custom SVG components for wall diagrams and technical drawings
 - **Persistence**: Pluggable persistence adapters (default: localStorage, easily swappable for server APIs)
 - **Export**: CSV format for material takeoffs and project documentation
@@ -62,7 +62,7 @@ pnpm build-storybook
 Each component follows a **co-location pattern** where all related files live together in the same folder:
 
 - **`.tsx`** - React component implementation
-- **`.module.css`** - Component-specific styles using CSS Modules
+- **`.module.css`** - Optional component-specific styles when Chakra props aren't enough
 - **`.stories.tsx`** - Storybook stories for component development and documentation
 - **`.test.tsx`** - Vitest unit tests for component functionality
 
@@ -89,8 +89,8 @@ The application adopts a clear separation of concerns, dividing responsibilities
 **Examples in our app:**
 
 - `WallItem` - Displays wall information, no business logic.
-- `Button` - Generic button component with various styles.
-- `Card` - Layout wrapper with no internal logic.
+- `AppHeader` - Top navigation built with Chakra primitives.
+- `AppSidebar` - Feature navigation using Chakra components.
 
 #### **Domain Services (Smart)**
 
@@ -385,7 +385,7 @@ const routes = [
 #### **Development Process**
 
 1. **Create Component** - Start with the `.tsx` file
-2. **Add Styles** - Create `.module.css` with BEM methodology
+2. **Add Styles** - Use Chakra style props or add a `.module.css` file if needed
 3. **Write Stories** - Document component variants and states
 4. **Add Tests** - Ensure component reliability and functionality
 5. **Iterate** - Use Storybook for visual development, tests for logic validation
@@ -397,7 +397,7 @@ const routes = [
 - **SVG Visualizations**: High-quality, scalable wall diagrams
 - **Responsive Design**: Works on desktop, tablet, and mobile devices
 - **Type Safety**: Full TypeScript coverage prevents calculation errors
-- **Modern CSS**: CSS Modules with BEM for maintainable, scoped styles
+- **Chakra UI**: Themeable components with responsive style props
 - **SVG First**: Vector graphics for crisp visualizations at any scale
 - **TypeScript Strict**: Strict type checking enabled
 - **Performance Focus**: Optimized calculations and rendering
@@ -428,9 +428,9 @@ We leverage **CSS Custom Properties (CSS Variables)** to define design tokens an
 
 #### **Implementation Details:**
 
-- **Definition**: Design tokens are defined as CSS Custom Properties, primarily in `src/shared/styles/variables.css`.
-- **Theme Switching**: A global mechanism (e.g., a `ThemeProvider` or a class on the `body` element) will dynamically update the CSS Custom Properties based on the active theme.
-- **Usage**: Components consume these design tokens directly via `var(--token-name)` in their CSS Modules.
+- **Definition**: Design tokens live in the Chakra theme and can be extended as needed.
+- **Theme Switching**: Chakra UI's color mode system manages light and dark values.
+- **Usage**: Components access tokens through Chakra's style props or `useTheme` hook.
 
 #### **Example (Conceptual):**
 
@@ -633,13 +633,12 @@ const useProjectStore = create<ProjectStore>()(
 
 ### Development Guidelines
 
-- **No External UI Libraries**: All components built from scratch
+- **Chakra UI**: Base component library and theming system
 - **Feature-First Architecture**: Code organized by business features rather than technical concerns
 - **Practical Component Design**: Components designed for actual use cases, not theoretical purity
 - **Container/Display Pattern**: Separate business logic (containers) from presentation (display components)
 - **Custom Hooks**: Extract reusable logic into custom hooks for better composition and testing
-- **BEM Methodology**: Block\_\_Element--Modifier naming convention for CSS
-- **CSS Modules**: Scoped styles to prevent conflicts
+- **CSS Modules**: Scoped styles for cases not covered by Chakra props
 - **SVG First**: Vector graphics for crisp visualizations at any scale
 - **TypeScript Strict**: Strict type checking enabled
 - **Performance Focus**: Optimized calculations and rendering

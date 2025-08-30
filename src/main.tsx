@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { createRouter, RouterProvider } from '@tanstack/react-router';
+import { ChakraProvider } from '@chakra-ui/react';
 
 // Import global styles
 import './shared/styles/variables.css';
@@ -29,7 +30,9 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <RouterProvider router={router} />
+      <ChakraProvider>
+        <RouterProvider router={router} />
+      </ChakraProvider>
     </StrictMode>,
   );
 }

@@ -2,6 +2,10 @@
 
 A comprehensive tool designed specifically for professional framers to calculate lumber requirements, visualize wall layouts, and generate accurate material takeoffs for residential and light commercial framing projects.
 
+## Tech Stack
+
+- [Chakra UI](https://chakra-ui.com) component library for UI.
+
 ## Learn More
 
 - [Features](./docs/features.md)

@@ -1,11 +1,16 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, test, expect, vi } from 'vitest';
+import { ChakraProvider } from '@chakra-ui/react';
 import WallForm from './WallForm';
 
 describe('WallForm', () => {
   test('submits form values', () => {
     const handleSubmit = vi.fn();
-    render(<WallForm onSubmit={handleSubmit} />);
+    render(
+      <ChakraProvider>
+        <WallForm onSubmit={handleSubmit} />
+      </ChakraProvider>,
+    );
 
     fireEvent.change(screen.getByLabelText(/name/i), {
       target: { value: 'Wall A' },
