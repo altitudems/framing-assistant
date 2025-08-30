@@ -1,7 +1,9 @@
 module.exports = {
   extends: ['@commitlint/config-conventional'],
   rules: {
-    // Allow slightly longer descriptive headers for multi-area chores
-    'header-max-length': [2, 'always', 120],
+    // Allow much longer descriptive headers and remove body/footer line limits
+    'header-max-length': [2, 'always', 300],
+    'body-max-line-length': [0],
+    'footer-max-line-length': [0],
   },
 };
