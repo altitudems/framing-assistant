@@ -1,35 +1,27 @@
 import { render, screen } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
-import { describe, it, expect } from 'vitest';
-import { createRouter, RouterProvider, createRootRoute, createRoute } from '@tanstack/react-router';
+import { describe, it, expect, vi } from 'vitest';
+// no-op
+
+vi.mock('@tanstack/react-router', async () => {
+  const actual =
+    await vi.importActual<typeof import('@tanstack/react-router')>('@tanstack/react-router');
+  return {
+    ...actual,
+    Link: ({
+      children,
+    }: {
+      children?: React.ReactNode | ((state: { isActive: boolean }) => React.ReactNode);
+    }) =>
+      typeof children === 'function'
+        ? (children as (s: { isActive: boolean }) => React.ReactNode)({ isActive: false })
+        : children,
+  };
+});
 import AppLayout from './AppLayout';
 
 function renderWithRouter(ui: React.ReactElement) {
-  const rootRoute = createRootRoute({ component: () => null });
-  const indexRoute = createRoute({
-    getParentRoute: () => rootRoute,
-    path: '/',
-    component: () => null,
-  });
-  const projectsRoute = createRoute({
-    getParentRoute: () => rootRoute,
-    path: '/projects',
-    component: () => null,
-  });
-  const settingsRoute = createRoute({
-    getParentRoute: () => rootRoute,
-    path: '/settings',
-    component: () => null,
-  });
-  const routeTree = rootRoute.addChildren([indexRoute, projectsRoute, settingsRoute]);
-  const router = createRouter({ routeTree });
-
-  return render(
-    <ChakraProvider>
-      <RouterProvider router={router} />
-      {ui}
-    </ChakraProvider>,
-  );
+  return render(<ChakraProvider>{ui}</ChakraProvider>);
 }
 
 describe('AppLayout', () => {
