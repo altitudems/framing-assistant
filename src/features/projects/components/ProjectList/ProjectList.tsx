@@ -1,6 +1,6 @@
-import { Box, Button, Heading, HStack, IconButton, Stack, Text } from '@chakra-ui/react';
-import { DeleteIcon } from '@chakra-ui/icons';
+import { Box, Heading, SimpleGrid } from '@chakra-ui/react';
 import type { Project } from '../../../../app/store/projectStore';
+import ProjectCard from '../ProjectCard/ProjectCard';
 
 interface ProjectListProps {
   projects: Project[];
@@ -12,31 +12,14 @@ interface ProjectListProps {
 function ProjectList({ projects, onSelect, onDelete, title = 'Your Projects' }: ProjectListProps) {
   return (
     <Box borderWidth="1px" borderRadius="md" p={4}>
-      <Heading as="h2" size="md" mb={2}>
+      <Heading as="h2" size="md" mb={4}>
         {title}
       </Heading>
-      <Stack spacing={2}>
+      <SimpleGrid spacing={4} minChildWidth="250px">
         {projects.map((project) => (
-          <HStack key={project.id} justify="space-between">
-            <Button variant="link" onClick={() => onSelect?.(project)}>
-              {project.name}
-            </Button>
-            <HStack>
-              <Text fontSize="sm" color="gray.500">
-                {new Date(project.createdAt).toLocaleDateString()}
-              </Text>
-              {onDelete && (
-                <IconButton
-                  aria-label="Delete project"
-                  icon={<DeleteIcon />}
-                  size="sm"
-                  onClick={() => onDelete(project.id)}
-                />
-              )}
-            </HStack>
-          </HStack>
+          <ProjectCard key={project.id} project={project} onSelect={onSelect} onDelete={onDelete} />
         ))}
-      </Stack>
+      </SimpleGrid>
     </Box>
   );
 }

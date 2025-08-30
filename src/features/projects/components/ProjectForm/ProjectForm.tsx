@@ -1,5 +1,5 @@
-import { Box, Button, Heading, Input, Stack } from '@chakra-ui/react';
-import { useState } from 'react';
+import { Button, Input, Stack } from '@chakra-ui/react';
+import { useState, type FormEvent } from 'react';
 
 interface ProjectFormProps {
   onSubmit: (name: string) => void;
@@ -8,23 +8,21 @@ interface ProjectFormProps {
 function ProjectForm({ onSubmit }: ProjectFormProps) {
   const [name, setName] = useState('');
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
     onSubmit(name.trim() || 'Untitled Project');
     setName('');
   };
 
   return (
-    <Box borderWidth="1px" borderRadius="md" p={4} mb={4}>
-      <Heading as="h2" size="md" mb={2}>
-        Create a New Project
-      </Heading>
+    <form onSubmit={handleSubmit}>
       <Stack direction={{ base: 'column', md: 'row' }} spacing={2}>
         <Input placeholder="Project name" value={name} onChange={(e) => setName(e.target.value)} />
-        <Button onClick={handleSubmit} colorScheme="teal">
+        <Button type="submit" colorScheme="teal">
           Create
         </Button>
       </Stack>
-    </Box>
+    </form>
   );
 }
 
