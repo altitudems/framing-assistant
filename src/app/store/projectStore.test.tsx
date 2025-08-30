@@ -21,4 +21,19 @@ describe('projectStore', () => {
     expect(useProjectStore.getState().projects[created.id]).toBeUndefined();
     expect(localStorage.getItem(`framing-project-${created.id}`)).toBeNull();
   });
+
+  it('adds and removes walls from a project', async () => {
+    const project = await useProjectStore.getState().createProject('Walls');
+    const wall = await useProjectStore.getState().addWall(project.id, {
+      name: 'Wall A',
+      length: 10,
+      height: 8,
+      studSpacing: '16',
+      topPlate: 'double',
+      bottomPlate: 'standard',
+    });
+    expect(useProjectStore.getState().projects[project.id].walls).toHaveLength(1);
+    await useProjectStore.getState().removeWall(project.id, wall.id);
+    expect(useProjectStore.getState().projects[project.id].walls).toHaveLength(0);
+  });
 });
