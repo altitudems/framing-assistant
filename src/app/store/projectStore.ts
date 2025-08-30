@@ -35,7 +35,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
     set({ projects });
   },
   createProject: (name) => {
-    const id = (globalThis.crypto?.randomUUID ?? (() => Math.random().toString(36).slice(2)))();
+    const id = globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2);
     const project: Project = { id, name, createdAt: new Date().toISOString() };
     localStorage.setItem(`${STORAGE_PREFIX}${id}`, JSON.stringify(project));
     set((state) => ({ projects: { ...state.projects, [id]: project } }));
