@@ -1,9 +1,0 @@
-/* No component-specific styles needed for ThemeProvider itself */
-/* Global theme variables are defined in src/shared/styles/variables.css */
-
-.themeProvider {
-  /* This class can be used to apply any wrapper styles if needed, */
-  /* but generally, theming is handled by CSS variables on :root */
-  height: 100%;
-  width: 100%;
-}

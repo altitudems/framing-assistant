@@ -1,14 +1,18 @@
 import { createFileRoute } from '@tanstack/react-router';
-import Section from '../shared/components/Layout/Section';
-import Card from '../shared/components/Layout/Card';
+import { Box, Heading, Text } from '@chakra-ui/react';
 
 export const Route = createFileRoute('/')({
   component: () => (
-    <Section title="Home">
-      <Card>
-        <h2>Welcome Home!</h2>
-        <p>This is the home page content.</p>
-      </Card>
-    </Section>
+    <Box p={4}>
+      <Heading as="h1" mb={4}>
+        Home
+      </Heading>
+      <Box borderWidth="1px" borderRadius="md" p={4}>
+        <Heading as="h2" size="md" mb={2}>
+          Welcome Home!
+        </Heading>
+        <Text>This is the home page content.</Text>
+      </Box>
+    </Box>
   ),
 });
