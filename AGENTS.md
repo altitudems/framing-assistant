@@ -29,7 +29,7 @@
 
 - Framework: Vitest + Testing Library (jsdom). Setup in `vite.config.ts` with projects:
   - Unit tests: `src/**/*.test.tsx`, setup `src/tests/setup.ts`.
-  - Storybook tests: configured via `@storybook/addon-vitest`.
+  - Storybook tests are currently disabled.
 - Coverage: V8 reporters (`text`, `json`, `html`). Run `pnpm test --coverage`.
 - Write tests for new components, states, and edge cases; prefer user-facing queries (roles/labels).
 
