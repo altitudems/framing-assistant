@@ -12,8 +12,8 @@ export default meta;
 type Story = StoryObj<typeof ProjectList>;
 
 const sampleProjects: Project[] = [
-  { id: '1', name: 'Project One', createdAt: new Date().toISOString() },
-  { id: '2', name: 'Project Two', createdAt: new Date().toISOString() },
+  { id: '1', name: 'Project One', createdAt: new Date().toISOString(), walls: [] },
+  { id: '2', name: 'Project Two', createdAt: new Date().toISOString(), walls: [] },
 ];
 
 export const Default: Story = {

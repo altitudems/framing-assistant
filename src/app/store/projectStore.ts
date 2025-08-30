@@ -3,11 +3,13 @@ import {
   PROJECT_STORAGE_PREFIX,
   localStorageAdapter,
 } from '../../shared/utils/persistence/localStorage.adapter';
+import type { Wall } from '../../features/walls/types/Wall.types';
 
 export interface Project {
   id: string;
   name: string;
   createdAt: string;
+  walls: Wall[];
 }
 
 interface ProjectState {
@@ -16,6 +18,8 @@ interface ProjectState {
   createProject: (name: string) => Promise<Project>;
   deleteProject: (id: string) => Promise<void>;
   getProject: (id: string) => Project | undefined;
+  addWall: (projectId: string, wall: Omit<Wall, 'id' | 'projectId'>) => Promise<Wall>;
+  removeWall: (projectId: string, wallId: string) => Promise<void>;
 }
 
 export const useProjectStore = create<ProjectState>((set, get) => ({
@@ -27,7 +31,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       try {
         const project = (await localStorageAdapter.load(key)) as Project | null;
         if (project) {
-          projects[project.id] = project;
+          projects[project.id] = { ...project, walls: project.walls ?? [] };
         }
       } catch {
         /* ignore invalid entries */
@@ -41,6 +45,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       id,
       name,
       createdAt: new Date().toISOString(),
+      walls: [],
     };
     await localStorageAdapter.save(`${PROJECT_STORAGE_PREFIX}${id}`, project);
     set((state) => ({ projects: { ...state.projects, [id]: project } }));
@@ -55,4 +60,35 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
     });
   },
   getProject: (id) => get().projects[id],
+  addWall: async (projectId, wallData) => {
+    const project = get().projects[projectId];
+    if (!project) {
+      throw new Error('Project not found');
+    }
+    const id = globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2);
+    const wall: Wall = { id, projectId, ...wallData } as Wall;
+    const updatedProject: Project = {
+      ...project,
+      walls: [...project.walls, wall],
+    };
+    await localStorageAdapter.save(`${PROJECT_STORAGE_PREFIX}${projectId}`, updatedProject);
+    set((state) => ({
+      projects: { ...state.projects, [projectId]: updatedProject },
+    }));
+    return wall;
+  },
+  removeWall: async (projectId, wallId) => {
+    const project = get().projects[projectId];
+    if (!project) {
+      return;
+    }
+    const updatedProject: Project = {
+      ...project,
+      walls: project.walls.filter((w) => w.id !== wallId),
+    };
+    await localStorageAdapter.save(`${PROJECT_STORAGE_PREFIX}${projectId}`, updatedProject);
+    set((state) => ({
+      projects: { ...state.projects, [projectId]: updatedProject },
+    }));
+  },
 }));
