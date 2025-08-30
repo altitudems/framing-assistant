@@ -6,7 +6,7 @@ import type { Project } from '../../../../app/store/projectStore';
 
 describe('ProjectList', () => {
   const projects: Project[] = [
-    { id: '1', name: 'Project One', createdAt: new Date().toISOString() },
+    { id: '1', name: 'Project One', createdAt: new Date().toISOString(), walls: [] },
   ];
 
   it('selects a project', () => {
