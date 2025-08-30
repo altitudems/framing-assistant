@@ -15,11 +15,19 @@ describe('WallForm', () => {
     fireEvent.change(screen.getByLabelText(/name/i), {
       target: { value: 'Wall A' },
     });
-    fireEvent.change(screen.getByLabelText(/length/i), {
+    // Length: 10 ft 0 in
+    fireEvent.change(screen.getByLabelText(/length feet/i), {
       target: { value: '10' },
     });
-    fireEvent.change(screen.getByLabelText(/height/i), {
+    fireEvent.change(screen.getByLabelText(/length inches/i), {
+      target: { value: '0' },
+    });
+    // Height: 8 ft 0 in
+    fireEvent.change(screen.getByLabelText(/height feet/i), {
       target: { value: '8' },
+    });
+    fireEvent.change(screen.getByLabelText(/height inches/i), {
+      target: { value: '0' },
     });
     fireEvent.change(screen.getByLabelText(/stud spacing/i), {
       target: { value: '24' },
@@ -44,6 +52,10 @@ describe('WallForm', () => {
       topPlate: 'single',
       bottomPlate: 'floating',
       floorGap: 1.5,
+      loadBearing: false,
+      bottomPlateTreatment: 'none',
+      leftCorner: undefined,
+      rightCorner: undefined,
     });
   });
 });
