@@ -11,6 +11,7 @@ The Framing Assistant eliminates guesswork from your framing projects by providi
 - **Professional Takeoffs** - Ready-to-use material lists for ordering
 - **Code-Compliant Detailing** - Proper header sizing and structural requirements
 - **Time-Saving Workflow** - Streamlined input process for complex wall assemblies
+- **Project Management** - Create, resume, and delete projects with automatic local saving
 
 ## 🚀 Getting Started
 

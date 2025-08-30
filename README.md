@@ -6,6 +6,10 @@ A comprehensive tool designed specifically for professional framers to calculate
 
 - [Chakra UI](https://chakra-ui.com) component library for UI.
 
+## Usage
+
+Visit the **Projects** page to create a new job or resume work on an existing one. Projects are saved in your browser so you can return later even when offline.
+
 ## Learn More
 
 - [Features](./docs/features.md)

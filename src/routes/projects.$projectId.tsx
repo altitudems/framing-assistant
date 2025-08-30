@@ -1,7 +1,8 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { Box, Heading, Text } from '@chakra-ui/react';
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { Box, Heading, Stack, Text } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useProjectStore } from '../app/store/projectStore';
+import { WallForm, WallList, useWallManager } from '../features/walls';
 
 export const Route = createFileRoute('/projects/$projectId')({
   component: ProjectDetail,
@@ -10,12 +11,12 @@ export const Route = createFileRoute('/projects/$projectId')({
 function ProjectDetail() {
   const { projectId } = Route.useParams();
   const { projects, loadProjects } = useProjectStore();
-
   const project = projects[projectId];
+  const { walls, addWall, removeWall } = useWallManager(projectId);
 
   useEffect(() => {
     if (!project) {
-      loadProjects();
+      void loadProjects();
     }
   }, [project, loadProjects]);
 
@@ -29,10 +30,16 @@ function ProjectDetail() {
 
   return (
     <Box p={4}>
-      <Heading as="h1" mb={4}>
-        {projects[projectId].name}
-      </Heading>
-      <Text>Project ID: {projectId}</Text>
+      <Stack spacing={2}>
+        <Heading as="h1">{project.name}</Heading>
+        <Text color="gray.600">Created {new Date(project.createdAt).toLocaleString()}</Text>
+        <Text>Project ID: {projectId}</Text>
+        <Link to="/projects">Back to projects</Link>
+      </Stack>
+      <Box mt={4}>
+        <WallForm onSubmit={(values) => void addWall(values)} />
+        <WallList walls={walls} onRemove={(id) => void removeWall(id)} />
+      </Box>
     </Box>
   );
 }

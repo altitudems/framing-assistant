@@ -1,7 +1,8 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
-import { Box, Button, Heading, Input, Stack } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { Box, Heading } from '@chakra-ui/react';
+import { useEffect } from 'react';
 import { useProjectStore } from '../app/store/projectStore';
+import { ProjectForm, ProjectList } from '../features/projects';
 
 export const Route = createFileRoute('/projects')({
   // For this specific route, bundle the component together.
@@ -11,16 +12,14 @@ export const Route = createFileRoute('/projects')({
 
 function ProjectsPage() {
   const navigate = useNavigate();
-  const { projects, loadProjects, createProject } = useProjectStore();
-  const [name, setName] = useState('');
+  const { projects, loadProjects, createProject, deleteProject } = useProjectStore();
 
   useEffect(() => {
-    loadProjects();
+    void loadProjects();
   }, [loadProjects]);
 
-  const handleCreate = () => {
-    const project = createProject(name.trim() || 'Untitled Project');
-    setName('');
+  const handleCreate = async (name: string) => {
+    const project = await createProject(name);
     navigate({ to: '/projects/$projectId', params: { projectId: project.id } });
   };
 
@@ -29,34 +28,15 @@ function ProjectsPage() {
       <Heading as="h1" mb={4}>
         Projects
       </Heading>
-      <Box borderWidth="1px" borderRadius="md" p={4} mb={4}>
-        <Heading as="h2" size="md" mb={2}>
-          Create a New Project
-        </Heading>
-        <Stack direction={{ base: 'column', md: 'row' }} spacing={2}>
-          <Input
-            placeholder="Project name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <Button onClick={handleCreate} colorScheme="teal">
-            Create
-          </Button>
-        </Stack>
-      </Box>
+      <ProjectForm onSubmit={handleCreate} />
       {Object.values(projects).length > 0 && (
-        <Box borderWidth="1px" borderRadius="md" p={4}>
-          <Heading as="h2" size="md" mb={2}>
-            Resume Project
-          </Heading>
-          <Stack>
-            {Object.values(projects).map((project) => (
-              <Link key={project.id} to="/projects/$projectId" params={{ projectId: project.id }}>
-                {project.name}
-              </Link>
-            ))}
-          </Stack>
-        </Box>
+        <ProjectList
+          projects={Object.values(projects)}
+          onSelect={(project) =>
+            navigate({ to: '/projects/$projectId', params: { projectId: project.id } })
+          }
+          onDelete={(id) => void deleteProject(id)}
+        />
       )}
     </Box>
   );
