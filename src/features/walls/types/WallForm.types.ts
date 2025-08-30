@@ -1,9 +1,3 @@
-export interface WallFormValues {
-  name: string;
-  length: number;
-  height: number;
-  studSpacing: '16' | '24';
-  topPlate: 'single' | 'double';
-  bottomPlate: 'standard' | 'floating' | 'pressure-treated';
-  floorGap?: number;
-}
+import type { WallInput } from './Wall.types';
+
+export type WallFormValues = WallInput;

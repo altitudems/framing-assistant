@@ -1,6 +1,4 @@
-export interface Wall {
-  id: string;
-  projectId: string;
+export interface WallSpecs {
   name: string;
   length: number;
   height: number;
@@ -9,3 +7,10 @@ export interface Wall {
   bottomPlate: 'standard' | 'floating' | 'pressure-treated';
   floorGap?: number;
 }
+
+export interface Wall extends WallSpecs {
+  id: string;
+  projectId: string;
+}
+
+export type WallInput = WallSpecs;

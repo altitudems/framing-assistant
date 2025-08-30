@@ -3,7 +3,7 @@ import {
   PROJECT_STORAGE_PREFIX,
   localStorageAdapter,
 } from '../../shared/utils/persistence/localStorage.adapter';
-import type { Wall } from '../../features/walls/types/Wall.types';
+import type { Wall, WallInput } from '../../features/walls/types/Wall.types';
 
 export interface Project {
   id: string;
@@ -18,7 +18,7 @@ interface ProjectState {
   createProject: (name: string) => Promise<Project>;
   deleteProject: (id: string) => Promise<void>;
   getProject: (id: string) => Project | undefined;
-  addWall: (projectId: string, wall: Omit<Wall, 'id' | 'projectId'>) => Promise<Wall>;
+  addWall: (projectId: string, wall: WallInput) => Promise<Wall>;
   removeWall: (projectId: string, wallId: string) => Promise<void>;
 }
 
@@ -66,7 +66,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       throw new Error('Project not found');
     }
     const id = globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2);
-    const wall: Wall = { id, projectId, ...wallData } as Wall;
+    const wall: Wall = { id, projectId, ...wallData };
     const updatedProject: Project = {
       ...project,
       walls: [...project.walls, wall],

@@ -6,3 +6,4 @@ storybook-static
 .next
 pnpm-lock.yaml
 
+src/routeTree.gen.ts
