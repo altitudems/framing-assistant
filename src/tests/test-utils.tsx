@@ -24,6 +24,7 @@ const mockApiClient: ApiClient = {
   createProject: vi.fn().mockResolvedValue({ data: null, success: true }),
   updateProject: vi.fn().mockResolvedValue({ data: null, success: true }),
   deleteProject: vi.fn().mockResolvedValue({ data: undefined, success: true }),
+  duplicateProject: vi.fn().mockResolvedValue({ data: null, success: true }),
   getWalls: vi.fn().mockResolvedValue({ data: [], success: true }),
   getWall: vi.fn().mockResolvedValue({ data: null, success: false, error: 'Not found' }),
   createWall: vi.fn().mockResolvedValue({ data: null, success: true }),
