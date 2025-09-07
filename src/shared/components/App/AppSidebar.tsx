@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from '@tanstack/react-router';
-import { Button, Flex, Text, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Button, Flex, Text, VStack } from '@chakra-ui/react';
 import HomeIcon from '../../../assets/icons/HomeIcon';
 import ProjectsIcon from '../../../assets/icons/ProjectsIcon';
 import SettingsIcon from '../../../assets/icons/SettingsIcon';
@@ -12,24 +12,26 @@ interface AppSidebarProps {
 }
 
 const AppSidebar: React.FC<AppSidebarProps> = ({ children, onNavigate }) => {
-  const bg = useColorModeValue('gray.100', 'gray.900');
-  const borderColor = useColorModeValue('gray.200', 'gray.700');
-  const brandColor = useColorModeValue('teal.600', 'teal.300');
-
   return (
     <Flex
       as="aside"
       direction="column"
       w={{ base: 'full', md: '250px' }}
       p={4}
-      bg={bg}
+      bg={{ base: 'gray.50', _dark: 'gray.900' }}
       borderRight="1px solid"
-      borderColor={borderColor}
+      borderColor={{ base: 'gray.200', _dark: 'gray.700' }}
       boxShadow="sm"
       h="100%"
     >
       <Link to="/" onClick={onNavigate} style={{ textDecoration: 'none' }}>
-        <Flex align="center" gap={2} mb={3} color={brandColor} w="100%">
+        <Flex
+          align="center"
+          gap={2}
+          mb={3}
+          color={{ base: 'teal.600', _dark: 'teal.400' }}
+          w="100%"
+        >
           <AppLogo size={24} aria-label="Framing Assistant Logo" />
           <Text
             as="span"
@@ -43,36 +45,37 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ children, onNavigate }) => {
           </Text>
         </Flex>
       </Link>
-      <VStack as="nav" align="stretch" spacing={2} flex="1">
+      <VStack as="nav" align="stretch" gap={2} flex="1">
         <Link
           to="/"
           activeOptions={{ exact: true }}
           children={({ isActive }) => (
             <Button
               variant={isActive ? 'solid' : 'ghost'}
-              colorScheme="gray"
+              colorPalette="gray"
               size="sm"
               justifyContent="flex-start"
-              leftIcon={<HomeIcon />}
               w="100%"
               onClick={onNavigate}
             >
+              <HomeIcon />
               Home
             </Button>
           )}
         />
         <Link
           to="/projects"
+          search={{ q: '', sort: 'updated', filter: 'all' }}
           children={({ isActive }) => (
             <Button
               variant={isActive ? 'solid' : 'ghost'}
-              colorScheme="gray"
+              colorPalette="gray"
               size="sm"
               justifyContent="flex-start"
-              leftIcon={<ProjectsIcon />}
               w="100%"
               onClick={onNavigate}
             >
+              <ProjectsIcon />
               Projects
             </Button>
           )}
@@ -82,13 +85,13 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ children, onNavigate }) => {
           children={({ isActive }) => (
             <Button
               variant={isActive ? 'solid' : 'ghost'}
-              colorScheme="gray"
+              colorPalette="gray"
               size="sm"
               justifyContent="flex-start"
-              leftIcon={<SettingsIcon />}
               w="100%"
               onClick={onNavigate}
             >
+              <SettingsIcon />
               Settings
             </Button>
           )}

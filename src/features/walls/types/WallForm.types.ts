@@ -1,3 +1,3 @@
-import type { WallInput } from './Wall.types';
+import type { CreateWallRequest } from '../../../shared/api';
 
-export type WallFormValues = WallInput;
+export type WallFormValues = CreateWallRequest;

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import WallItem from './WallItem';
-import type { Wall } from '../../types/Wall.types';
+import type { Wall } from '../../../../shared/api';
 
 const meta: Meta<typeof WallItem> = {
   title: 'Walls/WallItem',
@@ -20,6 +20,10 @@ const sampleWall: Wall = {
   studSpacing: '16',
   topPlate: 'double',
   bottomPlate: 'standard',
+  loadBearing: true,
+  bottomPlateTreatment: 'none',
+  leftCorner: 'california',
+  rightCorner: 'california',
 };
 
 export const Default: Story = {

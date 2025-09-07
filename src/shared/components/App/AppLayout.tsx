@@ -1,12 +1,12 @@
 import React from 'react';
 import {
-  Drawer,
+  DrawerRoot,
+  DrawerBackdrop,
   DrawerContent,
-  DrawerOverlay,
+  DrawerPositioner,
   Grid,
   GridItem,
   useDisclosure,
-  useColorModeValue,
 } from '@chakra-ui/react';
 import AppHeader from './AppHeader';
 import AppSidebar from './AppSidebar';
@@ -16,9 +16,7 @@ interface AppLayoutProps {
 }
 
 const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
-  const layoutBg = useColorModeValue('gray.50', 'gray.900');
-  const contentBg = useColorModeValue('white', 'gray.800');
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { open, onOpen, onClose } = useDisclosure();
 
   return (
     <>
@@ -26,8 +24,9 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         templateAreas={{ base: '"header" "content"', md: '"sidebar header" "sidebar content"' }}
         gridTemplateColumns={{ base: '1fr', md: '250px 1fr' }}
         gridTemplateRows="auto 1fr"
-        minH="100vh"
-        bg={layoutBg}
+        h="100vh"
+        bg={{ base: 'gray.50', _dark: 'gray.900' }}
+        overflow="hidden"
       >
         <GridItem area="sidebar" display={{ base: 'none', md: 'block' }}>
           <AppSidebar />
@@ -35,16 +34,31 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         <GridItem area="header" zIndex="docked">
           <AppHeader onOpenSidebar={onOpen} />
         </GridItem>
-        <GridItem area="content" as="main" overflowY="auto" p={4} bg={contentBg}>
+        <GridItem
+          area="content"
+          as="main"
+          overflowY="auto"
+          p={4}
+          bg={{ base: 'white', _dark: 'gray.900' }}
+        >
           {children}
         </GridItem>
       </Grid>
-      <Drawer placement="left" onClose={onClose} isOpen={isOpen} size="xs">
-        <DrawerOverlay />
-        <DrawerContent maxW="250px">
-          <AppSidebar onNavigate={onClose} />
-        </DrawerContent>
-      </Drawer>
+      <DrawerRoot
+        placement="start"
+        onOpenChange={(e) => {
+          if (!e.open) onClose();
+        }}
+        open={open}
+        size="xs"
+      >
+        <DrawerBackdrop />
+        <DrawerPositioner>
+          <DrawerContent maxW="250px">
+            <AppSidebar onNavigate={onClose} />
+          </DrawerContent>
+        </DrawerPositioner>
+      </DrawerRoot>
     </>
   );
 };

@@ -1,21 +1,13 @@
 import React from 'react';
-import {
-  HStack,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  InputGroup,
-  InputLeftAddon,
-} from '@chakra-ui/react';
+import { HStack, Input, InputElement, Box } from '@chakra-ui/react';
 
 interface FeetInchesInputProps {
   id: string;
   name: string;
   fieldLabel: string;
   defaultValueDecimalFeet?: number;
-  isRequired?: boolean;
+
+  onDecimalFeetChange?: (value: number | undefined) => void;
 }
 
 /**
@@ -27,7 +19,7 @@ const FeetInchesInput: React.FC<FeetInchesInputProps> = ({
   name,
   fieldLabel,
   defaultValueDecimalFeet,
-  isRequired,
+  onDecimalFeetChange,
 }) => {
   const initialFeet = Number.isFinite(defaultValueDecimalFeet)
     ? Math.floor(defaultValueDecimalFeet as number)
@@ -48,6 +40,13 @@ const FeetInchesInput: React.FC<FeetInchesInputProps> = ({
     const i = typeof inches === 'number' && !Number.isNaN(inches) ? inches : 0;
     return f + i / 12;
   }, [feet, inches]);
+
+  React.useEffect(() => {
+    if (typeof onDecimalFeetChange === 'function') {
+      const valid = Number.isFinite(decimalFeet) ? (decimalFeet as number) : undefined;
+      onDecimalFeetChange(valid);
+    }
+  }, [decimalFeet, onDecimalFeetChange]);
 
   // Chakra NumberInput onChange provides (valueAsString, valueAsNumber)
   const handleFeetChange = (_: string, value: number) => {
@@ -75,62 +74,36 @@ const FeetInchesInput: React.FC<FeetInchesInputProps> = ({
 
   return (
     <>
-      <HStack spacing={2} align="stretch" w="full">
-        <InputGroup flex={1} minW={0} w="full">
-          <InputLeftAddon borderRightRadius={0} borderRightWidth={0}>
-            ft
-          </InputLeftAddon>
-          <NumberInput
-            min={0}
-            precision={0}
+      <HStack gap={2} align="stretch" w="full">
+        <Box display="flex" flex={1} minW={0} w="full" position="relative">
+          <InputElement pointerEvents="none">ft</InputElement>
+          <Input
+            id={`${id}-feet`}
+            aria-label={`${fieldLabel} feet`}
+            type="number"
+            min="0"
             value={typeof feet === 'number' ? feet : ''}
-            onChange={handleFeetChange}
-            clampValueOnBlur={false}
+            onChange={(e) => handleFeetChange(e.target.value, parseInt(e.target.value) || 0)}
+            inputMode="numeric"
+            pl="10"
             w="full"
-          >
-            <NumberInputField
-              id={`${id}-feet`}
-              aria-label={`${fieldLabel} feet`}
-              required={isRequired}
-              inputMode="numeric"
-              borderLeftRadius={0}
-              pr="2rem"
-              w="full"
-            />
-            <NumberInputStepper right={0} w="1.75rem">
-              <NumberIncrementStepper />
-              <NumberDecrementStepper />
-            </NumberInputStepper>
-          </NumberInput>
-        </InputGroup>
-        <InputGroup flex={1} minW={0} w="full">
-          <InputLeftAddon borderRightRadius={0} borderRightWidth={0}>
-            in
-          </InputLeftAddon>
-          <NumberInput
-            min={0}
-            precision={2}
-            step={0.25}
+          />
+        </Box>
+        <Box display="flex" flex={1} minW={0} w="full" position="relative">
+          <InputElement pointerEvents="none">in</InputElement>
+          <Input
+            id={`${id}-inches`}
+            aria-label={`${fieldLabel} inches`}
+            type="number"
+            min="0"
+            step="0.25"
             value={typeof inches === 'number' ? inches : ''}
-            onChange={handleInchesChange}
-            clampValueOnBlur={false}
+            onChange={(e) => handleInchesChange(e.target.value, parseFloat(e.target.value) || 0)}
+            inputMode="decimal"
+            pl="10"
             w="full"
-          >
-            <NumberInputField
-              id={`${id}-inches`}
-              aria-label={`${fieldLabel} inches`}
-              required={isRequired}
-              inputMode="decimal"
-              borderLeftRadius={0}
-              pr="2rem"
-              w="full"
-            />
-            <NumberInputStepper right={0} w="1.75rem">
-              <NumberIncrementStepper />
-              <NumberDecrementStepper />
-            </NumberInputStepper>
-          </NumberInput>
-        </InputGroup>
+          />
+        </Box>
       </HStack>
       {/* Hidden computed decimal feet value for native form submit */}
       <input

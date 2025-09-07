@@ -1,11 +1,11 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, defaultSystem } from '@chakra-ui/react';
 import FeetInchesInput from './FeetInchesInput';
 
 function renderInput(props: React.ComponentProps<typeof FeetInchesInput>) {
   return render(
-    <ChakraProvider>
+    <ChakraProvider value={defaultSystem}>
       <form>
         <FeetInchesInput {...props} />
         <button type="submit">submit</button>

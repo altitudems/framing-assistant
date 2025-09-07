@@ -28,6 +28,8 @@ export const Default: Story = {
       studSpacing: '16',
       topPlate: 'double',
       bottomPlate: 'standard',
+      loadBearing: true,
+      bottomPlateTreatment: 'none',
     },
   },
 };

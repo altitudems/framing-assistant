@@ -1,8 +1,8 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { ChakraProvider } from '@chakra-ui/react';
+import { screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
+import { renderWithChakra } from '../../../../tests/test-utils';
 import WallList from './WallList';
-import type { Wall } from '../../types/Wall.types';
+import type { Wall } from '../../../../shared/api';
 
 describe('WallList', () => {
   const walls: Wall[] = [
@@ -15,27 +15,23 @@ describe('WallList', () => {
       studSpacing: '16',
       topPlate: 'double',
       bottomPlate: 'standard',
+      loadBearing: true,
+      bottomPlateTreatment: 'none',
+      leftCorner: 'california',
+      rightCorner: 'california',
     },
   ];
 
   it('renders walls and handles removal', () => {
     const handleRemove = vi.fn();
-    render(
-      <ChakraProvider>
-        <WallList walls={walls} onRemove={handleRemove} />
-      </ChakraProvider>,
-    );
+    renderWithChakra(<WallList walls={walls} onRemove={handleRemove} />);
     expect(screen.getByText(/wall a/i)).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /remove/i }));
     expect(handleRemove).toHaveBeenCalledWith('wall-1');
   });
 
   it('renders nothing when no walls', () => {
-    render(
-      <ChakraProvider>
-        <WallList walls={[]} />
-      </ChakraProvider>,
-    );
+    renderWithChakra(<WallList walls={[]} />);
     expect(screen.queryByText(/walls/i)).not.toBeInTheDocument();
   });
 });

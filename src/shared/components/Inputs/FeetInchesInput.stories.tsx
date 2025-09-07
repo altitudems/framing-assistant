@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Box, FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 import FeetInchesInput from './FeetInchesInput';
 
 const meta: Meta<typeof FeetInchesInput> = {
@@ -16,7 +16,6 @@ const meta: Meta<typeof FeetInchesInput> = {
     id: 'demo-dimension',
     name: 'dimension',
     fieldLabel: 'Dimension',
-    isRequired: true,
   },
 };
 
@@ -35,11 +34,15 @@ export const WithInitialValue: Story = {
 export const ErrorState: Story = {
   render: (args) => (
     <Box>
-      <FormControl isInvalid>
-        <FormLabel>Length</FormLabel>
+      <Box mb={2}>
+        <Text fontWeight="medium" mb={2}>
+          Length
+        </Text>
         <FeetInchesInput {...args} />
-        <FormErrorMessage>Please enter a valid length</FormErrorMessage>
-      </FormControl>
+        <Text fontSize="sm" color="red.500">
+          Please enter a valid length
+        </Text>
+      </Box>
     </Box>
   ),
 };

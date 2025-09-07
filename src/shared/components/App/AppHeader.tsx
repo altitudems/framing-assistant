@@ -1,17 +1,13 @@
 import React from 'react';
-import { Flex, IconButton, useColorMode, useColorModeValue } from '@chakra-ui/react';
-import { HamburgerIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
+import { Flex, IconButton } from '@chakra-ui/react';
+import { Menu } from 'lucide-react';
+import { ColorModeButton } from '../ui/color-mode';
 
 interface AppHeaderProps {
   onOpenSidebar?: () => void;
 }
 
 const AppHeader: React.FC<AppHeaderProps> = ({ onOpenSidebar }) => {
-  const { colorMode, toggleColorMode } = useColorMode();
-
-  const bg = useColorModeValue('gray.100', 'gray.900');
-  const borderColor = useColorModeValue('gray.200', 'gray.700');
-
   return (
     <Flex
       as="header"
@@ -19,9 +15,9 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onOpenSidebar }) => {
       align="center"
       px={4}
       py={2}
-      bg={bg}
+      bg={{ base: 'white', _dark: 'gray.900' }}
       borderBottom="1px solid"
-      borderColor={borderColor}
+      borderColor={{ base: 'gray.200', _dark: 'gray.700' }}
       boxShadow="sm"
       position="sticky"
       top="0"
@@ -29,19 +25,14 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onOpenSidebar }) => {
     >
       <IconButton
         aria-label="Open menu"
-        icon={<HamburgerIcon />}
         variant="ghost"
         display={{ base: 'inline-flex', md: 'none' }}
         onClick={onOpenSidebar}
-      />
+      >
+        <Menu size={20} />
+      </IconButton>
       <Flex align="center" gap={2}>
-        <IconButton
-          onClick={toggleColorMode}
-          variant="ghost"
-          size="sm"
-          aria-label={`Switch to ${colorMode === 'light' ? 'dark' : 'light'} mode`}
-          icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
-        />
+        <ColorModeButton />
       </Flex>
     </Flex>
   );

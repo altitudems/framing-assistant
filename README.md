@@ -14,6 +14,8 @@ Visit the **Projects** page to create a new job or resume work on an existing on
 
 - [Features](./docs/features.md)
 - [Technical Architecture](./docs/architecture.md)
+- [State Management Guide](./docs/state-management.md)
+- [Quick Reference](./docs/quick-reference.md)
 - [Project Structure](./docs/project-structure.md)
 - [Development Rules (cursor)](.cursor/rules.md)
 

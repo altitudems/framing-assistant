@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import ProjectCard from './ProjectCard';
-import type { Project } from '../../../../app/store/projectStore';
+import type { Project } from '../../../../shared/api';
 
 const project: Project = {
   id: '1',
@@ -16,6 +16,10 @@ const project: Project = {
       studSpacing: '16',
       topPlate: 'double',
       bottomPlate: 'standard',
+      loadBearing: true,
+      bottomPlateTreatment: 'none',
+      leftCorner: 'california',
+      rightCorner: 'california',
     },
   ],
 };
