@@ -58,7 +58,7 @@ export class OfflineApiClient implements ApiClient {
 
       for (const key of keys) {
         const project = await this.loadFromStorage<Project>(key);
-        if (project && !project.archived) {
+        if (project) {
           projects.push(project);
         }
       }

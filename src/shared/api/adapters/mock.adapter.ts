@@ -44,6 +44,22 @@ const mockProjects: Project[] = [
     archived: false,
     walls: [],
   },
+  {
+    id: '3',
+    name: 'Old Shed Project',
+    createdAt: new Date(Date.now() - 172800000).toISOString(),
+    updatedAt: new Date(Date.now() - 172800000).toISOString(),
+    archived: true,
+    walls: [],
+  },
+  {
+    id: '4',
+    name: 'Completed Renovation',
+    createdAt: new Date(Date.now() - 259200000).toISOString(),
+    updatedAt: new Date(Date.now() - 259200000).toISOString(),
+    archived: true,
+    walls: [],
+  },
 ];
 
 const mockPricingConfig: PricingConfig = {
@@ -62,7 +78,7 @@ export class MockApiClient implements ApiClient {
   async getProjects(): Promise<ApiListResponse<Project>> {
     await delay();
     return {
-      data: this.projects.filter((p) => !p.archived),
+      data: this.projects,
       success: true,
       total: this.projects.length,
     };
