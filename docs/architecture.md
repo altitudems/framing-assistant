@@ -122,68 +122,105 @@ To achieve a clean architecture and clear responsibility boundaries, business lo
 - **Responsibility**: Ensure all data and outputs meet industry standards and building codes.
 - **Examples**: Building code compliance checks, structural integrity validations.
 
-**3. Workflow Hooks (Refocused)**
+**3. Custom Hooks (Modern Patterns)**
 
-- **Purpose**: Bridge the gap between UI components and domain services.
-- **Responsibility**: Manage UI-specific state, handle loading states, error display, and user feedback, while delegating complex operations to domain services.
-- **Examples**: `useProjectEditor` for coordinating project updates, `useWallForm` for managing wall input and validation via services.
+- **Purpose**: Encapsulate feature logic and provide clean interfaces to components.
+- **Responsibility**: Coordinate between TanStack Query, domain services, and UI state.
+- **Examples**: `useProjectManager` for project operations, `useWallManager` for wall management, `useWallForm` for form state.
 
 **Example hook structure:**
 
 ```typescript
-// hooks/useWallCalculations.ts (now a calculation engine)
-export const calculateWallMaterials = (wall: Wall, options: CalculationOptions) => {
-  // Pure stud calculations, plate lengths, etc.
-  return { studCount, plateLength, totalCost };
+// features/projects/hooks/useProjectManager.ts
+export const useProjectManager = () => {
+  const apiClient = useApiClient();
+  const queryClient = useQueryClient();
+
+  const {
+    data: projects,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['projects'],
+    queryFn: () => apiClient.getProjects(),
+  });
+
+  const createProject = useMutation({
+    mutationFn: (data: CreateProjectRequest) => apiClient.createProject(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+    },
+  });
+
+  const updateProject = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdateProjectRequest }) =>
+      apiClient.updateProject(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+    },
+  });
+
+  const deleteProject = useMutation({
+    mutationFn: (id: string) => apiClient.deleteProject(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+    },
+  });
+
+  return {
+    projects: projects || [],
+    isLoading,
+    error,
+    createProject: createProject.mutate,
+    updateProject: updateProject.mutate,
+    deleteProject: deleteProject.mutate,
+    isCreating: createProject.isPending,
+    isUpdating: updateProject.isPending,
+    isDeleting: deleteProject.isPending,
+  };
 };
 
-// services/ProjectService.ts
-export const projectService = {
-  saveProject: async (project: Project) => {
-    // Orchestrates saving project, walls, openings via persistence adapter
-    await persistenceAdapter.save(`project-${project.id}`, project);
-  },
-  loadProject: async (id: string) => {
-    // Orchestrates loading project data
-    return persistenceAdapter.load(`project-${id}`);
-  },
-};
+// features/walls/hooks/useWallForm.ts
+export const useWallForm = (projectId: string, wallId?: string) => {
+  const [formState, setFormState] = useState<WallFormState>(initialFormState);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-// hooks/useProjectEditor.ts
-export const useProjectEditor = (projectId: string) => {
-  const [project, setProject] = useState<Project | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { data: wall } = useWall(wallId);
+  const updateWall = useUpdateWall();
+  const createWall = useCreateWall();
 
-  useEffect(() => {
-    const fetchProject = async () => {
-      setIsLoading(true);
-      try {
-        const loadedProject = await projectService.loadProject(projectId);
-        setProject(loadedProject);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
+  // Form validation and submission logic
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    if (!formState.name.trim()) newErrors.name = 'Name is required';
+    if (formState.length <= 0) newErrors.length = 'Length must be positive';
+    // ... more validation
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async () => {
+    if (!validateForm()) return;
+
+    const wallData: CreateWallRequest = {
+      projectId,
+      ...formState,
     };
-    fetchProject();
-  }, [projectId]);
 
-  const handleSave = async () => {
-    if (project) {
-      setIsLoading(true);
-      try {
-        await projectService.saveProject(project);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
+    if (wallId) {
+      updateWall.mutate({ id: wallId, data: wallData });
+    } else {
+      createWall.mutate(wallData);
     }
   };
 
-  return { project, isLoading, error, setProject, handleSave };
+  return {
+    formState,
+    setFormState,
+    errors,
+    handleSubmit,
+    isLoading: updateWall.isPending || createWall.isPending,
+  };
 };
 ```
 
@@ -193,178 +230,182 @@ export const useProjectEditor = (projectId: string) => {
 - **Domain Services**: For managing business logic, data flow, and complex workflows.
 - **Calculation Engines**: For pure, stateless computations.
 - **Validation Services**: For enforcing business rules and data integrity.
-- **Workflow Hooks**: For integrating UI with services and managing UI-specific state.
+- **Custom Hooks**: For encapsulating feature logic and coordinating between TanStack Query, services, and UI state.
+- **TanStack Query**: For server state management, caching, and synchronization.
+- **Zustand**: For client-side app-wide state that needs to persist or be shared across components.
 
 ### Technology Stack: State Management & Routing
 
-#### **State Management: Zustand**
+#### **State Management: Modern React Patterns**
 
-We chose **Zustand** for its simplicity and performance, now augmented with a normalized state structure:
+We've implemented a **layered state management architecture** that follows modern React best practices:
 
-- **Normalized State**: All entities (projects, walls, openings) are stored in a flat structure keyed by ID, ensuring a single source of truth.
-- **Selectors**: Derived state (e.g., a project with all its walls and openings) is computed using selectors, avoiding data duplication.
-- **Action Orchestration**: Zustand actions now primarily interact with domain services and update the normalized state, rather than containing complex business logic directly.
+**State Management Hierarchy:**
 
-**Store Structure (Conceptual):**
+1. **TanStack Query** - Server-derived shared state (projects, walls, pricing)
+2. **Zustand** - Client-side app-wide state (UI preferences, undo/redo)
+3. **React useState/useReducer** - Transient local state (form inputs, temporary UI state)
+4. **TanStack Router** - Route/URL-related state
+
+#### **TanStack Query for Server State**
+
+- **Automatic Caching** - Intelligent caching with background updates
+- **Optimistic Updates** - Immediate UI feedback with rollback on errors
+- **Background Refetching** - Keep data fresh automatically
+- **Error Handling** - Built-in retry logic and error boundaries
+- **Loading States** - Automatic loading and error state management
+
+**Query Hooks Structure:**
 
 ```typescript
-// app/store/projectStore.ts
-import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
-import { immer } from 'zustand/middleware/immer';
-import { projectService } from '../../services/ProjectService'; // Example service
+// features/projects/hooks/useProjects.ts
+export const useProjects = () => {
+  return useQuery({
+    queryKey: ['projects'],
+    queryFn: () => apiClient.getProjects(),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+};
 
-interface EntitiesState {
-  projects: Record<string, Project>;
-  walls: Record<string, Wall>;
-  openings: Record<string, Opening>;
+export const useProject = (id: string) => {
+  return useQuery({
+    queryKey: ['projects', id],
+    queryFn: () => apiClient.getProject(id),
+    enabled: !!id,
+  });
+};
+
+export const useCreateProject = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: CreateProjectRequest) => apiClient.createProject(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+    },
+  });
+};
+```
+
+#### **Zustand for Client State**
+
+- **App-wide UI State** - Theme preferences, sidebar state, etc.
+- **Undo/Redo System** - Command pattern for reversible operations
+- **Lightweight** - Minimal boilerplate, excellent performance
+
+**Store Structure:**
+
+```typescript
+// shared/store/appStore.ts
+interface AppState {
+  sidebarOpen: boolean;
+  theme: 'light' | 'dark';
+  // ... other UI state
 }
 
-interface ProjectState extends EntitiesState {
-  activeProjectId: string | null;
-  // ... other global UI state not specific to a project entity
+interface AppActions {
+  setSidebarOpen: (open: boolean) => void;
+  setTheme: (theme: 'light' | 'dark') => void;
 }
 
-interface ProjectActions {
-  addProject: (project: Project) => Promise<void>;
-  updateProject: (id: string, updates: Partial<Project>) => Promise<void>;
-  removeProject: (id: string) => Promise<void>;
-  setActiveProject: (id: string | null) => void;
-  loadActiveProject: (id: string) => Promise<void>;
-  // ... actions for walls, openings, etc. that interact with services
-}
-
-const useProjectStore = create<ProjectState & ProjectActions>()(
+const useAppStore = create<AppState & AppActions>()(
   devtools(
-    immer(
-      persist(
-        (set, get) => ({
-          projects: {},
-          walls: {},
-          openings: {},
-          activeProjectId: null,
+    persist(
+      (set) => ({
+        sidebarOpen: true,
+        theme: 'light',
 
-          addProject: async (project) => {
-            await projectService.saveProject(project);
-            set((state) => {
-              state.projects[project.id] = project;
-            });
-          },
-          updateProject: async (id, updates) => {
-            const currentProject = get().projects[id];
-            if (currentProject) {
-              const updatedProject = { ...currentProject, ...updates };
-              await projectService.saveProject(updatedProject);
-              set((state) => {
-                state.projects[id] = updatedProject;
-              });
-            }
-          },
-          removeProject: async (id) => {
-            await projectService.removeProject(id);
-            set((state) => {
-              delete state.projects[id];
-              // Also remove associated walls/openings
-              state.walls = Object.fromEntries(
-                Object.entries(state.walls).filter(([, wall]) => wall.projectId !== id),
-              );
-              state.openings = Object.fromEntries(
-                Object.entries(state.openings).filter(([, opening]) => opening.projectId !== id),
-              );
-              if (state.activeProjectId === id) {
-                state.activeProjectId = null;
-              }
-            });
-          },
-          setActiveProject: (id) => set({ activeProjectId: id }),
-          loadActiveProject: async (id) => {
-            const project = await projectService.loadProject(id);
-            if (project) {
-              set((state) => {
-                state.projects[project.id] = project;
-                project.walls.forEach((wall: Wall) => {
-                  state.walls[wall.id] = wall;
-                });
-                // Assuming openings are nested within walls or handled separately
-                project.walls.forEach((wall: Wall) => {
-                  wall.openings.forEach((opening: Opening) => {
-                    state.openings[opening.id] = opening;
-                  });
-                });
-                state.activeProjectId = project.id;
-              });
-            }
-          },
-        }),
-        {
-          name: 'framing-assistant-store',
-          storage: {
-            getItem: (name) => {
-              /* use persistenceAdapter.load */ return Promise.resolve(null);
-            }, // Placeholder for actual persistence adapter integration
-            setItem: (name, value) => {
-              /* use persistenceAdapter.save */ return Promise.resolve();
-            }, // Placeholder
-            removeItem: (name) => {
-              /* use persistenceAdapter.remove */ return Promise.resolve();
-            }, // Placeholder
-          },
-          // Customize serialize/deserialize to work with normalized state
-          // migrate: (persistedState, version) => { /* handle migrations */ return persistedState; }
-        },
-      ),
+        setSidebarOpen: (open) => set({ sidebarOpen: open }),
+        setTheme: (theme) => set({ theme }),
+      }),
+      { name: 'app-store' },
     ),
-    { name: 'ProjectStore' },
+    { name: 'AppStore' },
   ),
 );
 ```
 
-#### **Routing: React Router v6**
+#### **Unified API Interface**
 
-We use **React Router** for client-side navigation:
+- **Multiple Modes** - Mock, offline (localStorage), and live (backend) adapters
+- **Type Safety** - Full TypeScript coverage across all adapters
+- **Consistent Interface** - Same API regardless of underlying storage
+- **Easy Testing** - Mock adapter for unit tests
 
-- **Declarative Routing** - Routes defined as components
-- **Nested Routes** - Support for complex layouts
-- **Type Safety** - Full TypeScript support
-- **Code Splitting** - Lazy loading for better performance
-- **Search Params** - URL state management for projects
-- **Protected Routes** - Route guards for project access
+**API Client Structure:**
+
+```typescript
+// shared/api/client.interface.ts
+export interface ApiClient {
+  // Projects
+  getProjects(): Promise<Project[]>;
+  getProject(id: string): Promise<Project>;
+  createProject(data: CreateProjectRequest): Promise<Project>;
+  updateProject(id: string, data: UpdateProjectRequest): Promise<Project>;
+  deleteProject(id: string): Promise<void>;
+
+  // Walls
+  getWalls(projectId: string): Promise<Wall[]>;
+  getWall(id: string): Promise<Wall>;
+  createWall(data: CreateWallRequest): Promise<Wall>;
+  updateWall(id: string, data: UpdateWallRequest): Promise<Wall>;
+  deleteWall(id: string): Promise<void>;
+
+  // Pricing
+  getPricingConfig(): Promise<PricingConfig>;
+  updatePricingConfig(data: UpdatePricingRequest): Promise<PricingConfig>;
+}
+```
+
+#### **Routing: TanStack Router**
+
+We use **TanStack Router** for type-safe, file-based routing:
+
+- **File-based Routing** - Routes defined by file structure
+- **Type Safety** - Full TypeScript support with automatic type inference
+- **Code Splitting** - Automatic route-based code splitting
+- **Search Params** - Type-safe search parameter handling
+- **Loaders** - Data loading at the route level
 
 **Route Structure:**
 
 ```typescript
-// routes.tsx
-const routes = [
-  {
-    path: '/',
-    element: <MainLayout />,
-    children: [
-      { path: '', element: <Dashboard /> },
-      { path: 'project/:id', element: <ProjectEditor /> },
-      { path: 'project/:id/walls', element: <WallManager /> },
-      { path: 'project/:id/openings', element: <OpeningManager /> },
-      { path: 'project/:id/takeoff', element: <MaterialTakeoff /> },
-      { path: 'project/:id/visualization', element: <WallVisualization /> }
-    ]
-  }
-];
+// routes/projects.tsx
+export const Route = createFileRoute('/projects')({
+  component: ProjectsPage,
+});
+
+// routes/projects_.$projectId.tsx
+export const Route = createFileRoute('/projects/$projectId')({
+  component: ProjectDetailPage,
+  loader: ({ params }) => {
+    // Data loading logic
+  },
+});
 ```
 
 #### **Why These Choices?**
 
-**Zustand over Redux:**
+**TanStack Query over custom state management:**
 
-- **Simpler** - Less boilerplate, easier to learn
-- **Lighter** - Smaller bundle size for our needs
-- **Faster** - Better performance for our use case
-- **Modern** - Built for modern React patterns
+- **Battle-tested** - Proven in production at scale
+- **Automatic Optimizations** - Caching, deduplication, background updates
+- **Developer Experience** - Excellent DevTools and debugging
+- **Performance** - Intelligent re-rendering and data synchronization
 
-**React Router over alternatives:**
+**Zustand for client state:**
 
-- **Mature** - Battle-tested in production
-- **Standard** - Most React developers know it
-- **Flexible** - Handles our routing needs perfectly
-- **Performance** - Excellent code splitting support
+- **Lightweight** - Minimal bundle impact
+- **Simple** - Easy to understand and maintain
+- **Performant** - Excellent performance characteristics
+- **Flexible** - Works well with other state management solutions
+
+**TanStack Router over React Router:**
+
+- **Type Safety** - Full TypeScript integration
+- **File-based** - Intuitive route organization
+- **Performance** - Built-in optimizations
+- **Modern** - Designed for modern React patterns
 
 ### Testing & Development Workflow
 
@@ -513,123 +554,179 @@ const validateProject = (data: unknown) => {
 };
 ```
 
-### Persistence Architecture
+### API Architecture
 
-The app uses a **persistence adapter pattern** that abstracts storage operations:
+The app uses a **unified API interface** that supports multiple storage modes:
 
-#### **Adapter Interface**
+#### **API Client Interface**
 
 ```typescript
-// shared/types/persistence.types.ts
-interface PersistenceAdapter {
-  save: (key: string, data: any) => Promise<void>;
-  load: (key: string) => Promise<any>;
-  remove: (key: string) => Promise<void>;
-  list: () => Promise<string[]>;
+// shared/api/client.interface.ts
+export interface ApiClient {
+  // Projects
+  getProjects(): Promise<Project[]>;
+  getProject(id: string): Promise<Project>;
+  createProject(data: CreateProjectRequest): Promise<Project>;
+  updateProject(id: string, data: UpdateProjectRequest): Promise<Project>;
+  deleteProject(id: string): Promise<void>;
+
+  // Walls
+  getWalls(projectId: string): Promise<Wall[]>;
+  getWall(id: string): Promise<Wall>;
+  createWall(data: CreateWallRequest): Promise<Wall>;
+  updateWall(id: string, data: UpdateWallRequest): Promise<Wall>;
+  deleteWall(id: string): Promise<void>;
+
+  // Pricing
+  getPricingConfig(): Promise<PricingConfig>;
+  updatePricingConfig(data: UpdatePricingRequest): Promise<PricingConfig>;
 }
 ```
 
-#### **Current Implementation: LocalStorage**
+#### **Multiple Adapter Implementations**
+
+**1. Mock Adapter (Development/Demo)**
 
 ```typescript
-// shared/utils/localStorage.adapter.ts
-export const localStorageAdapter: PersistenceAdapter = {
-  save: async (key, data) => {
-    localStorage.setItem(key, JSON.stringify(data));
-  },
-  load: async (key) => {
-    const item = localStorage.getItem(key);
-    return item ? JSON.parse(item) : null;
-  },
-  remove: async (key) => {
-    localStorage.removeItem(key);
-  },
-  list: async () => {
-    return Object.keys(localStorage).filter((key) => key.startsWith('framing-project-'));
-  },
-};
+// shared/api/adapters/mock.adapter.ts
+export class MockApiClient implements ApiClient {
+  private projects: Project[] = [];
+  private walls: Wall[] = [];
+  private pricingConfig: PricingConfig = defaultPricingConfig;
+
+  async getProjects(): Promise<Project[]> {
+    return [...this.projects];
+  }
+
+  async createProject(data: CreateProjectRequest): Promise<Project> {
+    const project: Project = {
+      id: generateId(),
+      ...data,
+      createdAt: new Date().toISOString(),
+    };
+    this.projects.push(project);
+    return project;
+  }
+
+  // ... other methods
+}
 ```
 
-#### **Future Implementation: Server API**
+**2. Offline Adapter (LocalStorage)**
 
 ```typescript
-// shared/utils/api.adapter.ts
-export const apiAdapter: PersistenceAdapter = {
-  save: async (key, data) => {
-    await fetch(`/api/projects/${key}`, {
-      method: 'PUT',
+// shared/api/adapters/offline.adapter.ts
+export class OfflineApiClient implements ApiClient {
+  private storage = new Map<string, any>();
+
+  async getProjects(): Promise<Project[]> {
+    const projects = this.storage.get('projects') || [];
+    return projects;
+  }
+
+  async createProject(data: CreateProjectRequest): Promise<Project> {
+    const project: Project = {
+      id: generateId(),
+      ...data,
+      createdAt: new Date().toISOString(),
+    };
+
+    const projects = this.getProjects();
+    projects.push(project);
+    this.storage.set('projects', projects);
+
+    return project;
+  }
+
+  // ... other methods with localStorage persistence
+}
+```
+
+**3. Live Adapter (Backend API)**
+
+```typescript
+// shared/api/adapters/live.adapter.ts
+export class LiveApiClient implements ApiClient {
+  private baseUrl: string;
+
+  constructor(baseUrl: string) {
+    this.baseUrl = baseUrl;
+  }
+
+  async getProjects(): Promise<Project[]> {
+    const response = await fetch(`${this.baseUrl}/projects`);
+    if (!response.ok) throw new Error('Failed to fetch projects');
+    return response.json();
+  }
+
+  async createProject(data: CreateProjectRequest): Promise<Project> {
+    const response = await fetch(`${this.baseUrl}/projects`, {
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
-  },
-  load: async (key) => {
-    const response = await fetch(`/api/projects/${key}`);
-    return response.ok ? response.json() : null;
-  },
-  remove: async (key) => {
-    await fetch(`/api/projects/${key}`, { method: 'DELETE' });
-  },
-  list: async () => {
-    const response = await fetch('/api/projects');
-    const projects = await response.json();
-    return projects.map((p) => p.id);
-  },
+    if (!response.ok) throw new Error('Failed to create project');
+    return response.json();
+  }
+
+  // ... other methods with HTTP requests
+}
+```
+
+#### **API Client Factory**
+
+```typescript
+// shared/api/client.factory.ts
+export function createApiClient(mode: 'mock' | 'offline' | 'live', config?: any): ApiClient {
+  switch (mode) {
+    case 'mock':
+      return new MockApiClient();
+    case 'offline':
+      return new OfflineApiClient();
+    case 'live':
+      return new LiveApiClient(config.baseUrl);
+    default:
+      throw new Error(`Unknown API mode: ${mode}`);
+  }
+}
+```
+
+#### **Integration with TanStack Query**
+
+```typescript
+// features/projects/hooks/useProjects.ts
+export const useProjects = () => {
+  const apiClient = useApiClient();
+
+  return useQuery({
+    queryKey: ['projects'],
+    queryFn: () => apiClient.getProjects(),
+    staleTime: 5 * 60 * 1000,
+  });
+};
+
+export const useCreateProject = () => {
+  const apiClient = useApiClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: CreateProjectRequest) => apiClient.createProject(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+    },
+  });
 };
 ```
 
-#### **Zustand Store Integration**
+#### **Benefits of This Architecture**
 
-```typescript
-// app/store/projectStore.ts
-import { persist } from 'zustand/middleware';
-import { localStorageAdapter } from '../shared/utils/localStorage.adapter';
-
-interface ProjectStore {
-  project: Project;
-  walls: Wall[];
-  // ... other state
-
-  // Actions use the adapter
-  saveProject: () => Promise<void>;
-  loadProject: (id: string) => Promise<void>;
-}
-
-const useProjectStore = create<ProjectStore>()(
-  persist(
-    (set, get) => ({
-      // ... state
-
-      saveProject: async () => {
-        const state = get();
-        await persistenceAdapter.save(`project-${state.project.id}`, state.project);
-      },
-
-      loadProject: async (id: string) => {
-        const project = await persistenceAdapter.load(`project-${id}`);
-        if (project) {
-          set({ project, walls: project.walls });
-        }
-      },
-    }),
-    {
-      name: 'framing-assistant-store',
-      storage: {
-        getItem: (name) => localStorageAdapter.load(name),
-        setItem: (name, value) => localStorageAdapter.save(name, value),
-        removeItem: (name) => localStorageAdapter.remove(name),
-      },
-    },
-  ),
-);
-```
-
-#### **Benefits of This Pattern**
-
-- **Flexibility** - Easy to switch from localStorage to server APIs
-- **Testing** - Mock adapters for unit tests
-- **Feature Flags** - Switch adapters based on environment or user preferences
-- **Offline Support** - Fallback to localStorage when server is unavailable
-- **Migration** - Smooth transition from local-only to cloud-based storage
+- **Flexibility** - Easy to switch between storage modes
+- **Testing** - Mock adapter for unit tests
+- **Development** - Mock mode for rapid prototyping
+- **Offline Support** - Offline mode for field use
+- **Production Ready** - Live mode for backend integration
+- **Type Safety** - Consistent interface across all adapters
+- **Migration Path** - Smooth transition between modes
 
 ### Development Guidelines
 

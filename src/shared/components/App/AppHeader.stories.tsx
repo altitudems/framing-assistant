@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, defaultSystem } from '@chakra-ui/react';
 import AppHeader from './AppHeader';
 
 const meta: Meta<typeof AppHeader> = {
@@ -7,7 +7,7 @@ const meta: Meta<typeof AppHeader> = {
   component: AppHeader,
   decorators: [
     (Story) => (
-      <ChakraProvider>
+      <ChakraProvider value={defaultSystem}>
         <Story />
       </ChakraProvider>
     ),

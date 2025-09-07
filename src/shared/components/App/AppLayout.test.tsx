@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, defaultSystem } from '@chakra-ui/react';
 import { describe, it, expect, vi } from 'vitest';
 // no-op
 
@@ -21,7 +21,7 @@ vi.mock('@tanstack/react-router', async () => {
 import AppLayout from './AppLayout';
 
 function renderWithRouter(ui: React.ReactElement) {
-  return render(<ChakraProvider>{ui}</ChakraProvider>);
+  return render(<ChakraProvider value={defaultSystem}>{ui}</ChakraProvider>);
 }
 
 describe('AppLayout', () => {

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import WallList from './WallList';
-import type { Wall } from '../../types/Wall.types';
+import type { Wall } from '../../../../shared/api';
 
 const meta: Meta<typeof WallList> = {
   title: 'Walls/WallList',
@@ -21,6 +21,10 @@ const walls: Wall[] = [
     studSpacing: '16',
     topPlate: 'double',
     bottomPlate: 'standard',
+    loadBearing: true,
+    bottomPlateTreatment: 'none',
+    leftCorner: 'california',
+    rightCorner: 'california',
   },
   {
     id: 'wall-2',
@@ -31,7 +35,11 @@ const walls: Wall[] = [
     studSpacing: '24',
     topPlate: 'single',
     bottomPlate: 'floating',
+    loadBearing: false,
+    bottomPlateTreatment: 'pressure-treated',
     floorGap: 1,
+    leftCorner: 'double',
+    rightCorner: 'three-stud',
   },
 ];
 

@@ -1,12 +1,12 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, defaultSystem } from '@chakra-ui/react';
 import { describe, it, expect, vi } from 'vitest';
 import AppHeader from './AppHeader';
 
 describe('AppHeader', () => {
   it('renders and toggles color mode', () => {
     render(
-      <ChakraProvider>
+      <ChakraProvider value={defaultSystem}>
         <AppHeader />
       </ChakraProvider>,
     );
@@ -21,7 +21,7 @@ describe('AppHeader', () => {
   it('calls onOpenSidebar when hamburger clicked', () => {
     const onOpen = vi.fn();
     render(
-      <ChakraProvider>
+      <ChakraProvider value={defaultSystem}>
         <AppHeader onOpenSidebar={onOpen} />
       </ChakraProvider>,
     );
