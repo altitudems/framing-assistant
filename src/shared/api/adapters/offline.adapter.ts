@@ -186,9 +186,10 @@ export class OfflineApiClient implements ApiClient {
         };
       }
 
+      const newProjectId = crypto.randomUUID();
       const duplicated: Project = {
         ...original,
-        id: crypto.randomUUID(),
+        id: newProjectId,
         name: `${original.name} (Copy)`,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
@@ -196,15 +197,9 @@ export class OfflineApiClient implements ApiClient {
         walls: original.walls.map((wall) => ({
           ...wall,
           id: crypto.randomUUID(),
-          projectId: crypto.randomUUID(), // This will be updated to the new project ID below
+          projectId: newProjectId,
         })),
       };
-
-      // Update all walls to reference the new project ID
-      duplicated.walls = duplicated.walls.map((wall) => ({
-        ...wall,
-        projectId: duplicated.id,
-      }));
 
       await this.saveToStorage(`${PROJECT_STORAGE_PREFIX}${duplicated.id}`, duplicated);
 
